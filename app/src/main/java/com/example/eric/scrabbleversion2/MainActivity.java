@@ -54,8 +54,6 @@ public class MainActivity extends AppCompatActivity {
         }
         //end chunk
 
-
-
         findResults.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 EditText input_letters = (EditText) findViewById(R.id.input_letters);
@@ -84,11 +82,11 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
                 Sort.sortAlphabetically(results);
-//                ArrayAdapter<String> itemsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, results);
+
+//                ArrayAdapter<String> itemsAdapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, results);
 //                listView.setAdapter(itemsAdapter);
             }
         });
-
 
         p1.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
