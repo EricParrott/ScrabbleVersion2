@@ -2,7 +2,9 @@ package com.example.eric.scrabbleversion2;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -35,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         BufferedReader reader;
         ArrayList<String> dictionaryArrayList = new ArrayList<String>();
         try{
-            final InputStream file = getAssets().open("C:\\Users\\Eric\\Documents\\ScrabbleVersion2\\app\\src\\main\\assets\\dictionary2.txt");
+            final InputStream file = getAssets().open("dictionary2.txt");
             reader = new BufferedReader(new InputStreamReader(file));
             String line = reader.readLine();
             while(line != null){
@@ -82,9 +84,11 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
                 Sort.sortAlphabetically(results);
-
-//                ArrayAdapter<String> itemsAdapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, results);
-//                listView.setAdapter(itemsAdapter);
+                String TAG = "Value of results: ";
+                Log.i(TAG, results.toString());
+                ArrayAdapter<String> itemsAdapter =
+                        new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, results);
+                listView.setAdapter(itemsAdapter);
             }
         });
 
