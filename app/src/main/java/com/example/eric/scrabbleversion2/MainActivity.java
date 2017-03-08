@@ -1,8 +1,8 @@
 package com.example.eric.scrabbleversion2;
 
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -22,21 +22,24 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Button findResults = (Button) findViewById(R.id.find_results_button);
         Button p1 = (Button) findViewById(R.id.button1);
         Button p2 = (Button) findViewById(R.id.button2);
         Button p3 = (Button) findViewById(R.id.button3);
         Button p4 = (Button) findViewById(R.id.button4);
-        Button timer = (Button) findViewById(R.id.timer_button);
-        final ListView listView = (ListView) findViewById(R.id.listView);
+        Button startTimerButton = (Button) findViewById(R.id.start_timer_button);
+        Button stopTimerButton = (Button) findViewById(R.id.stop_timer_button);
 
+        final ListView listView = (ListView) findViewById(R.id.listView);
 
         //read in file chunk and populate hashtable chunk
         BufferedReader reader;
         ArrayList<String> dictionaryArrayList = new ArrayList<String>();
-        try{
+        try {
             final InputStream file = getAssets().open("dictionary2.txt");
             reader = new BufferedReader(new InputStreamReader(file));
             String line = reader.readLine();
@@ -84,8 +87,8 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
                 Sort.sortAlphabetically(results);
-                String TAG = "Value of results: ";
-                Log.i(TAG, results.toString());
+                //String TAG = "Value of results: ";
+                //Log.i(TAG, results.toString());
                 ArrayAdapter<String> itemsAdapter =
                         new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, results);
                 listView.setAdapter(itemsAdapter);
@@ -131,5 +134,29 @@ public class MainActivity extends AppCompatActivity {
                 editPlayerFourPoints.setText("");
             }
         });
+
+        startTimerButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                final TextView timerDisplay = (TextView) findViewById(R.id.count_down_timer);
+                CountDownTimer countDownTimer;
+                countDownTimer = new CountDownTimer(180*1000, 1000) {
+                    @Override
+                    public void onTick(long millisUntilFinished) {
+                        timerDisplay.setText("" + millisUntilFinished / 1000);
+                    }
+                    @Override
+                    public void onFinish() {
+                        timerDisplay.setText("Time's Up");
+                    }
+                };
+                countDownTimer.start();
+            }
+        });
+
+//        stopTimerButton.setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View v) {
+//                countDownTimer.cancel();
+//            }
+//        });
     }
 }
