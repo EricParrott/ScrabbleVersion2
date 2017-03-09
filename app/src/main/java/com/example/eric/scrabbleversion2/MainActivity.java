@@ -61,6 +61,10 @@ public class MainActivity extends AppCompatActivity {
 
         findResults.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                ArrayList<String> clear = new ArrayList<String>();
+                ArrayAdapter<String> defaultAdapter =
+                        new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, clear);
+                listView.setAdapter(defaultAdapter);
                 EditText input_letters = (EditText) findViewById(R.id.input_letters);
                 String letterBank = input_letters.getText().toString();
                 Permutations.combine(letterBank, new StringBuffer(), 0);
@@ -82,13 +86,13 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
                 for (int i=0; i<results.size(); i++) {
-                    if (Sort.containsAllChars(letterBank, results.get(i).toLowerCase()) == false) {
+                    if (!Sort.containsAllChars(letterBank, results.get(i).toLowerCase())) {
                         results.remove(i);
                     }
                 }
                 Sort.sortAlphabetically(results);
-                //String TAG = "Value of results: ";
-                //Log.i(TAG, results.toString());
+    //            String TAG = "Value of results: ";
+    //            Log.i(TAG, results.toString());
                 ArrayAdapter<String> itemsAdapter =
                         new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, results);
                 listView.setAdapter(itemsAdapter);
