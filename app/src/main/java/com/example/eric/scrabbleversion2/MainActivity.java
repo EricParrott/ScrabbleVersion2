@@ -33,10 +33,9 @@ public class MainActivity extends AppCompatActivity {
         Button p4 = (Button) findViewById(R.id.button4);
         Button startTimerButton = (Button) findViewById(R.id.start_timer_button);
         Button stopTimerButton = (Button) findViewById(R.id.stop_timer_button);
-
         final ListView listView = (ListView) findViewById(R.id.listView);
 
-        //read in file chunk and populate hashtable chunk
+        //read in file chunk and populate hashtable chunk---------------------------------------
         BufferedReader reader;
         ArrayList<String> dictionaryArrayList = new ArrayList<String>();
         try {
@@ -57,20 +56,29 @@ public class MainActivity extends AppCompatActivity {
         for (int i=0; i<dictionaryArrayList.size(); i++) {
            Permutations.dictionary.put(dictionaryArrayList.get(i).hashCode(), dictionaryArrayList.get(i));
         }
-        //end chunk
+        //end chunk----------------------------------------------------------------------------
 
         findResults.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                ArrayList<String> clear = new ArrayList<String>();
-                ArrayAdapter<String> defaultAdapter =
-                        new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, clear);
-                listView.setAdapter(defaultAdapter);
+
+                //this first chunk clears the list view each time you generate words-----------
+                Permutations.matches.clear();
+                Permutations.combinations.clear();
+                Permutations.allPermutations.clear();
+
+//                ArrayList<String> clear = new ArrayList<String>();
+//                ArrayAdapter<String> defaultAdapter =
+//                        new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, clear);
+//                listView.setAdapter(defaultAdapter);
+                //-----------------------------------------------------------------------------
                 EditText input_letters = (EditText) findViewById(R.id.input_letters);
                 String letterBank = input_letters.getText().toString();
+
                 Permutations.combine(letterBank, new StringBuffer(), 0);
                 for (String str: Permutations.combinations) {
                     Permutations.allPermutations.addAll(Permutations.permutation(str));
                 }
+
                 for(int i = 0; i< Permutations.allPermutations.size(); i++) {
                     String possibleWord = Permutations.allPermutations.get(i).toUpperCase();
                     int hash = possibleWord.hashCode();
