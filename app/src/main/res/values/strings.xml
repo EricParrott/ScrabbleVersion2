@@ -1,3 +1,8 @@
 <resources>
-    <string name="app_name">iCheat</string>
+    <string name="app_name">Scrabble Companion</string>
+    <string-array name="sort_array">
+        <item>alphabetized</item>
+        <item>byLength</item>
+        <item>byScore</item>
+    </string-array>
 </resources>

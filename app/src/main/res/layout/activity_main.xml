@@ -52,12 +52,11 @@
 
     <Spinner
         android:id="@+id/spinner"
-        android:layout_width="100dp"
+        android:layout_width="125dp"
         android:layout_below="@+id/listView"
         android:layout_marginTop="10dp"
         android:layout_height="20dp"
-        android:background="#e0e0eb"
-        />
+        android:background="#e0e0eb" />
 
     <GridLayout
         android:id="@+id/gridLayout1"

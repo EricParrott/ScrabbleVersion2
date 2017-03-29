@@ -4,10 +4,12 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.io.BufferedReader;
@@ -17,6 +19,8 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+
+import static com.example.eric.scrabbleversion2.Permutations.reorderedMatches;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -58,19 +62,21 @@ public class MainActivity extends AppCompatActivity {
         }
         //end chunk----------------------------------------------------------------------------
 
+        //code to create and format spinner goes here-----------------------------------------
+        Spinner spinner = (Spinner) findViewById(R.id.spinner);
+        ArrayAdapter<CharSequence> spinAdapter = ArrayAdapter.createFromResource(this,
+                R.array.sort_array, android.R.layout.simple_spinner_dropdown_item);
+        spinAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(spinAdapter);
+        //-------------------------------------------------------------------------------------
+
         findResults.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
                 //this first chunk clears the list view each time you generate words-----------
                 Permutations.matches.clear();
                 Permutations.combinations.clear();
                 Permutations.allPermutations.clear();
-
-//                ArrayList<String> clear = new ArrayList<String>();
-//                ArrayAdapter<String> defaultAdapter =
-//                        new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, clear);
-//                listView.setAdapter(defaultAdapter);
-                //-----------------------------------------------------------------------------
+                //end chunk-------------------------------------------------------------------
                 EditText input_letters = (EditText) findViewById(R.id.input_letters);
                 String letterBank = input_letters.getText().toString();
 
@@ -88,6 +94,9 @@ public class MainActivity extends AppCompatActivity {
                 }
                 Set<String> s = new HashSet<String>(Permutations.matches);
                 ArrayList<String> results = new ArrayList<String>(s);
+
+                Permutations.reorderedMatches = results;
+
                 for (int i=0; i<results.size(); i++) {
                     if (results.get(i).length() > letterBank.length()) {
                         results.remove(i);
@@ -98,12 +107,40 @@ public class MainActivity extends AppCompatActivity {
                         results.remove(i);
                     }
                 }
-                Sort.sortAlphabetically(results);
+                //Sort.sortAlphabetically(results);
     //            String TAG = "Value of results: ";
     //            Log.i(TAG, results.toString());
                 ArrayAdapter<String> itemsAdapter =
-                        new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, results);
+                        new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, Permutations.reorderedMatches);
                 listView.setAdapter(itemsAdapter);
+            }
+        });
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedItem = parent.getItemAtPosition(position).toString();
+                if(selectedItem.equals("alphabetized")) {
+                    Sort.sortAlphabetically(reorderedMatches);
+                    ArrayAdapter<String> itemsAdapter =
+                            new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, Permutations.reorderedMatches);
+                    listView.setAdapter(itemsAdapter);
+
+                }
+                if(selectedItem.equals("byLength")) {
+                    Sort.sortByWordLength(reorderedMatches);
+                    ArrayAdapter<String> itemsAdapter =
+                            new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, Permutations.reorderedMatches);
+                    listView.setAdapter(itemsAdapter);
+                }
+                if(selectedItem.equals("byScore")) {
+                    Sort.sortByWordScore(reorderedMatches);
+                    ArrayAdapter<String> itemsAdapter =
+                            new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, Permutations.reorderedMatches);
+                    listView.setAdapter(itemsAdapter);
+                }
+            } // to close the onItemSelected
+            public void onNothingSelected(AdapterView<?> parent) {
+                //do nothing here
             }
         });
 
