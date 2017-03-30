@@ -76,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
                 Permutations.matches.clear();
                 Permutations.combinations.clear();
                 Permutations.allPermutations.clear();
+                Permutations.reorderedMatches.clear();
                 //end chunk-------------------------------------------------------------------
                 EditText input_letters = (EditText) findViewById(R.id.input_letters);
                 String letterBank = input_letters.getText().toString();
@@ -107,11 +108,11 @@ public class MainActivity extends AppCompatActivity {
                         results.remove(i);
                     }
                 }
-                //Sort.sortAlphabetically(results);
+                Sort.sortAlphabetically(results);
     //            String TAG = "Value of results: ";
     //            Log.i(TAG, results.toString());
                 ArrayAdapter<String> itemsAdapter =
-                        new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, Permutations.reorderedMatches);
+                        new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, results);
                 listView.setAdapter(itemsAdapter);
             }
         });
