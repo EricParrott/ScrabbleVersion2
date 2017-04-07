@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
         //end chunk----------------------------------------------------------------------------
 
         //code to create and format spinner goes here-----------------------------------------
-        Spinner spinner = (Spinner) findViewById(R.id.spinner);
+        final Spinner spinner = (Spinner) findViewById(R.id.spinner);
         ArrayAdapter<CharSequence> spinAdapter = ArrayAdapter.createFromResource(this,
                 R.array.sort_array, android.R.layout.simple_spinner_dropdown_item);
         spinAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -98,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
                 Permutations.combinations.clear();
                 Permutations.allPermutations.clear();
                 Permutations.reorderedMatches.clear();
+                spinner.setSelection(0);
                 //end chunk-------------------------------------------------------------------
                 EditText input_letters = (EditText) findViewById(R.id.input_letters);
                 String letterBank = input_letters.getText().toString();

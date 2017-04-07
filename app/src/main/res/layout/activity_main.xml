@@ -25,7 +25,7 @@
     <EditText
         android:id="@+id/input_letters"
         android:layout_width="wrap_content"
-        android:layout_height="100px"
+        android:layout_height="50dp"
         android:inputType="textPersonName"
         android:ems="8"
         android:maxLength="8"
@@ -43,7 +43,7 @@
         android:id="@+id/find_results_button"
         android:layout_below="@+id/input_letters"
         android:layout_width="fill_parent"
-        android:layout_height="75px"
+        android:layout_height="50dp"
         android:text="Find Words"
         android:fontFamily="casual"
         android:textStyle="normal|bold"
@@ -73,9 +73,11 @@
             android:layout_gravity="left|top"
             android:text="P2"
             android:layout_width="75dp"
+            android:layout_height="50dp"
             android:layout_column="1"
             android:fontFamily="casual"
             android:textStyle="normal|bold"
+            android:textSize="10dp"
             style="@style/Widget.AppCompat.Button.Colored" />
 
         <Button
@@ -83,9 +85,11 @@
             android:layout_gravity="left|top"
             android:text="P4"
             android:layout_width="75dp"
+            android:layout_height="50dp"
             android:layout_column="3"
             android:fontFamily="casual"
             android:textStyle="normal|bold"
+            android:textSize="10dp"
             style="@style/Widget.AppCompat.Button.Colored" />
 
         <Button
@@ -93,9 +97,11 @@
             android:layout_gravity="left|top"
             android:text="P3"
             android:layout_width="75dp"
+            android:layout_height="50dp"
             android:layout_column="2"
             android:fontFamily="casual"
             android:textStyle="normal|bold"
+            android:textSize="10dp"
             style="@style/Widget.AppCompat.Button.Colored" />
 
         <Button
@@ -103,10 +109,12 @@
             android:layout_gravity="left|top"
             android:text="P1"
             android:layout_width="75dp"
+            android:layout_height="50dp"
             android:layout_row="0"
             android:layout_column="0"
             android:fontFamily="casual"
             android:textStyle="normal|bold"
+            android:textSize="10dp"
             style="@style/Widget.AppCompat.Button.Colored" />
     </GridLayout>
 
@@ -130,6 +138,7 @@
         android:layout_height="50dp"
         android:layout_below="@+id/gridLayout1"
         android:layout_alignParentLeft="true"
+        android:layout_marginTop="10dp"
         android:layout_alignParentStart="true">
 
         <EditText
