@@ -56,65 +56,64 @@
         android:layout_below="@+id/listView"
         android:layout_marginTop="10dp"
         android:layout_height="20dp"
-        android:background="#e0e0eb" />
+        android:background="#e0e0eb"
+        android:layout_marginBottom="10dp"/>
 
     <GridLayout
         android:id="@+id/gridLayout1"
         android:layout_width="match_parent"
-        android:layout_height="100px"
+        android:layout_height="130px"
         android:columnCount="4"
         android:rowCount="1"
         android:orientation="horizontal"
         tools:context=".GridLayoutActivity"
-        android:layout_below="@+id/spinner">
+        android:layout_below="@+id/spinner"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="5dp"
+        android:layout_alignParentStart="true">
 
+        <Button
+            android:id="@+id/button1"
+            android:layout_gravity="left|top"
+            android:text="P1"
+            android:layout_width="80dp"
+            android:layout_height="50dp"
+            android:layout_row="0"
+            android:layout_column="0"
+            android:fontFamily="casual"
+            android:textStyle="normal|bold"
+            style="@style/Widget.AppCompat.Button.Colored" />
         <Button
             android:id="@+id/button2"
             android:layout_gravity="left|top"
             android:text="P2"
-            android:layout_width="75dp"
+            android:layout_width="80dp"
             android:layout_height="50dp"
             android:layout_column="1"
             android:fontFamily="casual"
             android:textStyle="normal|bold"
-            android:textSize="10dp"
-            style="@style/Widget.AppCompat.Button.Colored" />
-
-        <Button
-            android:id="@+id/button4"
-            android:layout_gravity="left|top"
-            android:text="P4"
-            android:layout_width="75dp"
-            android:layout_height="50dp"
-            android:layout_column="3"
-            android:fontFamily="casual"
-            android:textStyle="normal|bold"
-            android:textSize="10dp"
             style="@style/Widget.AppCompat.Button.Colored" />
 
         <Button
             android:id="@+id/button3"
             android:layout_gravity="left|top"
             android:text="P3"
-            android:layout_width="75dp"
+            android:layout_width="80dp"
             android:layout_height="50dp"
             android:layout_column="2"
             android:fontFamily="casual"
             android:textStyle="normal|bold"
-            android:textSize="10dp"
             style="@style/Widget.AppCompat.Button.Colored" />
 
         <Button
-            android:id="@+id/button1"
+            android:id="@+id/button4"
             android:layout_gravity="left|top"
-            android:text="P1"
-            android:layout_width="75dp"
+            android:text="P4"
+            android:layout_width="80dp"
             android:layout_height="50dp"
-            android:layout_row="0"
-            android:layout_column="0"
+            android:layout_column="3"
             android:fontFamily="casual"
             android:textStyle="normal|bold"
-            android:textSize="10dp"
             style="@style/Widget.AppCompat.Button.Colored" />
     </GridLayout>
 
@@ -153,7 +152,7 @@
             android:background="#e0e0eb"
             android:layout_column="0"
             android:layout_row="0"
-            android:layout_marginRight="30dp"
+            android:layout_marginRight="35dp"
             android:layout_marginLeft="6dp"
             android:inputType="number"
             />
@@ -169,7 +168,7 @@
             android:background="#e0e0eb"
             android:layout_column="1"
             android:layout_row="0"
-            android:layout_marginRight="30dp"
+            android:layout_marginRight="35dp"
             android:inputType="number"
             />
 
@@ -184,7 +183,7 @@
             android:background="#e0e0eb"
             android:layout_column="2"
             android:layout_row="0"
-            android:layout_marginRight="30dp"
+            android:layout_marginRight="40dp"
             android:inputType="number"
             />
 
@@ -199,13 +198,15 @@
             android:background="#e0e0eb"
             android:layout_column="3"
             android:layout_row="0"
-            android:layout_marginRight="20dp"
             android:inputType="number"
             />
 
         <TextView
             android:id="@+id/player_one_score_tally"
             android:layout_height="wrap_content"
+            android:fontFamily="casual"
+            android:textStyle="normal|bold"
+            android:textSize="15dp"
             android:text="0"
             android:layout_column="0"
             android:layout_row="1"
@@ -219,6 +220,9 @@
             android:id="@+id/player_two_score_tally"
             android:layout_width="wrap_content"
             android:layout_height="20dp"
+            android:fontFamily="casual"
+            android:textStyle="normal|bold"
+            android:textSize="15dp"
             android:text="0"
             android:layout_column="1"
             android:layout_row="1"
@@ -230,6 +234,9 @@
             android:id="@+id/player_three_score_tally"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
+            android:fontFamily="casual"
+            android:textStyle="normal|bold"
+            android:textSize="15dp"
             android:text="0"
             android:layout_column="2"
             android:layout_row="1"
@@ -242,6 +249,9 @@
             android:id="@+id/player_four_score_tally"
             android:layout_width="wrap_content"
             android:layout_height="20dp"
+            android:fontFamily="casual"
+            android:textStyle="normal|bold"
+            android:textSize="15dp"
             android:text="0"
             android:layout_column="3"
             android:layout_row="1"
@@ -271,7 +281,7 @@
         <Button
             android:id="@+id/stop_timer_button"
             android:layout_gravity="left|top"
-            android:text="Reset"
+            android:text="Stop"
             android:fontFamily="casual"
             android:textStyle="normal|bold"
             android:layout_row="0"

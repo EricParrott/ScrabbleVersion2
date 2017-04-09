@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
         final TextView player2Score = (TextView) findViewById(R.id.player_two_score_tally);
         final TextView player3Score = (TextView) findViewById(R.id.player_three_score_tally);
         final TextView player4Score = (TextView) findViewById(R.id.player_four_score_tally);
+        final TextView timerDisplay = (TextView) findViewById(R.id.count_down_timer);
 
         //read in file chunk and populate hashtable chunk---------------------------------------
         BufferedReader reader;
@@ -277,29 +278,31 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //this chunk works the simple timer--------------------------------------------------------------------
+        final CountDownTimer countDownTimer;
+        countDownTimer = new CountDownTimer(180 * 1000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                timerDisplay.setText("" + millisUntilFinished / 1000);
+            }
+
+            @Override
+            public void onFinish() {
+                timerDisplay.setText("Time's Up");
+            }
+        };
+
         startTimerButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                final TextView timerDisplay = (TextView) findViewById(R.id.count_down_timer);
-                CountDownTimer countDownTimer;
-                countDownTimer = new CountDownTimer(180 * 1000, 1000) {
-                    @Override
-                    public void onTick(long millisUntilFinished) {
-                        timerDisplay.setText("" + millisUntilFinished / 1000);
-                    }
-
-                    @Override
-                    public void onFinish() {
-                        timerDisplay.setText("Time's Up");
-                    }
-                };
                 countDownTimer.start();
             }
         });
 
-//        stopTimerButton.setOnClickListener(new View.OnClickListener() {
-//            public void onClick(View v) {
-//                countDownTimer.cancel();
-//            }
-//        });
+        stopTimerButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                countDownTimer.cancel();
+            }
+        });
+        //end timer chunk--------------------------------------------------------------------------------------
     }
 }
