@@ -1,14 +1,17 @@
 package com.example.eric.scrabbleversion2;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,13 +26,25 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.net.ssl.HttpsURLConnection;
+
 import static com.example.eric.scrabbleversion2.Permutations.reorderedMatches;
 
+
 public class MainActivity extends AppCompatActivity {
+    private String onClickItem;
+
+    private String dictionaryEntries() {
+        final String language = "en";
+        final String word = this.onClickItem;
+        final String word_id = word.toLowerCase(); //word id is case sensitive and lowercase is required
+        return "https://od-api.oxforddictionaries.com:443/api/v1/entries/" + language + "/" + word_id + "/definitions";
+    }
 
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -152,15 +167,27 @@ public class MainActivity extends AppCompatActivity {
                     //display no results found in listview if no results found
                     if (results.isEmpty()) {
                         results.add("no available options");
-                        ArrayAdapter<String> emptyItemsAdapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, results);
+                        ArrayAdapter<String> emptyItemsAdapter = new ArrayAdapter<String>(MainActivity.this,
+                                android.R.layout.simple_list_item_1, results);
                         listView.setAdapter(emptyItemsAdapter);
-                    } else {
+                    }
+
+                    else {
                         Sort.sortAlphabetically(results);
-                        //            String TAG = "Value of results: ";
-                        //            Log.i(TAG, results.toString());
+                        //String TAG = "Value of results: ";
+                        //Log.i(TAG, results.toString());
                         ArrayAdapter<String> itemsAdapter =
                                 new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, results);
                         listView.setAdapter(itemsAdapter);
+
+                        //the code for retrieving the dictionary definition of word is below-----------------
+                        listView.setOnItemClickListener(new OnItemClickListener() {
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                onClickItem = (listView.getItemAtPosition(position).toString().toLowerCase());
+                                new CallbackTask().execute(dictionaryEntries());
+                            }
+                        });
+                        //end API code section----------------------------------------------------------------
                     }
                 }
             }
@@ -337,5 +364,47 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         //end timer chunk--------------------------------------------------------------------------------------
+    }
+
+    //this chunk here is for the API call
+    private class CallbackTask extends AsyncTask<String, Integer, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            //TODO: replace with your own app id and app key
+            final String app_id = "99ec26a8";
+            final String app_key = "2704b58d2e5a86093e6e76611550868d";
+            try {
+                URL url = new URL(params[0]);
+                HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
+                urlConnection.setRequestProperty("Accept","application/json");
+                urlConnection.setRequestProperty("app_id",app_id);
+                urlConnection.setRequestProperty("app_key",app_key);
+
+                // read the output from the server
+                BufferedReader reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+                StringBuilder stringBuilder = new StringBuilder();
+
+                String line = null;
+                while ((line = reader.readLine()) != null) {
+                    stringBuilder.append(line + "\n");
+                }
+
+                return stringBuilder.toString();
+
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+                return e.toString();
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            String TAG = "JSON object: ";
+            Log.i(TAG, result);
+        }
     }
 }
