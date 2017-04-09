@@ -41,9 +41,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Button findResults = (Button) findViewById(R.id.find_results_button);
-        Button startTimerButton = (Button) findViewById(R.id.start_timer_button);
-        Button stopTimerButton = (Button) findViewById(R.id.stop_timer_button);
-
+        final Button startTimerButton = (Button) findViewById(R.id.start_timer_button);
+        //stop timer button needs to default to disabled unless timer is running.
+        final Button stopTimerButton = (Button) findViewById(R.id.stop_timer_button);
+        stopTimerButton.setEnabled(false);
         final ListView listView = (ListView) findViewById(R.id.listView);
 
         final Button p1 = (Button) findViewById(R.id.button1);
@@ -131,12 +132,21 @@ public class MainActivity extends AppCompatActivity {
                         results.remove(i);
                     }
                 }
-                Sort.sortAlphabetically(results);
-                //            String TAG = "Value of results: ";
-                //            Log.i(TAG, results.toString());
-                ArrayAdapter<String> itemsAdapter =
-                        new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, results);
-                listView.setAdapter(itemsAdapter);
+
+                //display no results found in listview if no results found
+                if (results.isEmpty()) {
+                    results.add("no available options");
+                    ArrayAdapter<String> emptyItemsAdapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, results);
+                    listView.setAdapter(emptyItemsAdapter);
+                }
+                else {
+                    Sort.sortAlphabetically(results);
+                    //            String TAG = "Value of results: ";
+                    //            Log.i(TAG, results.toString());
+                    ArrayAdapter<String> itemsAdapter =
+                            new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, results);
+                    listView.setAdapter(itemsAdapter);
+                }
             }
         });
 
@@ -295,12 +305,17 @@ public class MainActivity extends AppCompatActivity {
         startTimerButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 countDownTimer.start();
+                stopTimerButton.setEnabled(true);
+                startTimerButton.setEnabled(false);
             }
         });
 
         stopTimerButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 countDownTimer.cancel();
+                startTimerButton.setEnabled(true);
+                stopTimerButton.setEnabled(false);
+                timerDisplay.setText("180");
             }
         });
         //end timer chunk--------------------------------------------------------------------------------------
