@@ -113,13 +113,13 @@ public class MainActivity extends AppCompatActivity {
                 String letterBank = input_letters.getText().toString().toLowerCase();
                 if (!letterBank.matches("[a-zA-Z]*")) {
                     Context context = getApplicationContext();
-                    CharSequence text = "remove special characters from field";
+                    CharSequence text = "alphabetic characters only!";
                     int duration = Toast.LENGTH_SHORT;
                     Toast toast = Toast.makeText(context, text, duration);
                     toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0,0);
                     toast.show();
                 }
-
+                //end of input handling.  If input passes handling, the below code will execute.----
                 else {
                     Permutations.combine(letterBank, new StringBuffer(), 0);
                     for (String str : Permutations.combinations) {
@@ -320,6 +320,7 @@ public class MainActivity extends AppCompatActivity {
 
         startTimerButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                //the below starts the timer and resets the start/reset button enabled/disabled state
                 countDownTimer.start();
                 stopTimerButton.setEnabled(true);
                 startTimerButton.setEnabled(false);
@@ -328,6 +329,7 @@ public class MainActivity extends AppCompatActivity {
 
         stopTimerButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                //the below cancels the timer and resets the start/reset button enabled/disabled state
                 countDownTimer.cancel();
                 startTimerButton.setEnabled(true);
                 stopTimerButton.setEnabled(false);

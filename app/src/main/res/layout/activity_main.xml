@@ -281,7 +281,7 @@
         <Button
             android:id="@+id/stop_timer_button"
             android:layout_gravity="left|top"
-            android:text="Stop"
+            android:text="Reset"
             android:fontFamily="casual"
             android:textStyle="normal|bold"
             android:layout_row="0"
