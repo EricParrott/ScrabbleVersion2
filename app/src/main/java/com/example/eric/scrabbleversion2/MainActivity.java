@@ -22,6 +22,9 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,7 +37,6 @@ import java.util.Set;
 import javax.net.ssl.HttpsURLConnection;
 
 import static com.example.eric.scrabbleversion2.Permutations.reorderedMatches;
-
 
 public class MainActivity extends AppCompatActivity {
     private String onClickItem;
@@ -123,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
                 //end chunk-------------------------------------------------------------------
 
                 //this chunk handles the input of illegal special characters and eliminates case-sensitivity
-                // within the user inputted letter bank
+                // within the user inputted letter bank, as well as checking to make sure the field is not empty.
                 EditText input_letters = (EditText) findViewById(R.id.input_letters);
                 String letterBank = input_letters.getText().toString().toLowerCase();
                 if (!letterBank.matches("[a-zA-Z]*")) {
@@ -134,7 +136,17 @@ public class MainActivity extends AppCompatActivity {
                     toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0,0);
                     toast.show();
                 }
-                //end of input handling.  If input passes handling, the below code will execute.----
+
+                else if (letterBank.isEmpty()) {
+                    Context context = getApplicationContext();
+                    CharSequence text = "add letters before searching for results.";
+                    int duration = Toast.LENGTH_SHORT;
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0,0);
+                    toast.show();
+                }
+                //end of input handling.  If input passes handling requisites, the below code will execute.----
+
                 else {
                     Permutations.combine(letterBank, new StringBuffer(), 0);
                     for (String str : Permutations.combinations) {
@@ -403,8 +415,14 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-            String TAG = "JSON object: ";
-            Log.i(TAG, result);
+            try {
+                String TAG = "JSON object: ";
+                Log.i(TAG, result);
+                JSONObject jsonObject = new JSONObject(result);
+            } catch (JSONException e) {
+                Log.e("MYAPP", "unexpected JSON exception", e);
+                // Do something to recover ... or kill the app.
+            }
         }
     }
 }
