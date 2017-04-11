@@ -118,94 +118,93 @@ public class MainActivity extends AppCompatActivity {
 
         findResults.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+            //this first chunk clears the list view each time you generate words-----------
+            Permutations.matches.clear();
+            Permutations.combinations.clear();
+            Permutations.allPermutations.clear();
+            Permutations.reorderedMatches.clear();
+            spinner.setSelection(0);
+            //end chunk-------------------------------------------------------------------
 
-                //this first chunk clears the list view each time you generate words-----------
-                Permutations.matches.clear();
-                Permutations.combinations.clear();
-                Permutations.allPermutations.clear();
-                Permutations.reorderedMatches.clear();
-                spinner.setSelection(0);
-                //end chunk-------------------------------------------------------------------
+            //this chunk handles the input of illegal special characters and eliminates case-sensitivity
+            // within the user inputted letter bank, as well as checking to make sure the field is not empty.
+            EditText input_letters = (EditText) findViewById(R.id.input_letters);
+            String letterBank = input_letters.getText().toString().toLowerCase();
+            if (!letterBank.matches("[a-zA-Z]*")) {
+                Context context = getApplicationContext();
+                CharSequence text = "alphabetic characters only!";
+                int duration = Toast.LENGTH_SHORT;
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0,0);
+                toast.show();
+            }
 
-                //this chunk handles the input of illegal special characters and eliminates case-sensitivity
-                // within the user inputted letter bank, as well as checking to make sure the field is not empty.
-                EditText input_letters = (EditText) findViewById(R.id.input_letters);
-                String letterBank = input_letters.getText().toString().toLowerCase();
-                if (!letterBank.matches("[a-zA-Z]*")) {
-                    Context context = getApplicationContext();
-                    CharSequence text = "alphabetic characters only!";
-                    int duration = Toast.LENGTH_SHORT;
-                    Toast toast = Toast.makeText(context, text, duration);
-                    toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0,0);
-                    toast.show();
+            else if (letterBank.isEmpty()) {
+                Context context = getApplicationContext();
+                CharSequence text = "add letters before searching for results.";
+                int duration = Toast.LENGTH_SHORT;
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0,0);
+                toast.show();
+            }
+            //end of input handling.  If input passes handling requisites, the below code will execute.----
+
+            else {
+                Permutations.combine(letterBank, new StringBuffer(), 0);
+                for (String str : Permutations.combinations) {
+                    Permutations.allPermutations.addAll(Permutations.permutation(str));
                 }
 
-                else if (letterBank.isEmpty()) {
-                    Context context = getApplicationContext();
-                    CharSequence text = "add letters before searching for results.";
-                    int duration = Toast.LENGTH_SHORT;
-                    Toast toast = Toast.makeText(context, text, duration);
-                    toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0,0);
-                    toast.show();
+                for (int i = 0; i < Permutations.allPermutations.size(); i++) {
+                    String possibleWord = Permutations.allPermutations.get(i).toUpperCase();
+                    int hash = possibleWord.hashCode();
+                    if (Permutations.dictionary.get(hash) != null) {
+                        Permutations.matches.add(Permutations.dictionary.get(hash));
+                    }
                 }
-                //end of input handling.  If input passes handling requisites, the below code will execute.----
+                Set<String> s = new HashSet<String>(Permutations.matches);
+                ArrayList<String> results = new ArrayList<String>(s);
+
+                Permutations.reorderedMatches = results;
+
+                for (int i = 0; i < results.size(); i++) {
+                    if (results.get(i).length() > letterBank.length()) {
+                        results.remove(i);
+                    }
+                }
+                for (int i = 0; i < results.size(); i++) {
+                    if (!Sort.containsAllChars(letterBank, results.get(i).toLowerCase())) {
+                        results.remove(i);
+                    }
+                }
+
+                //display no results found in listview if no results found
+                if (results.isEmpty()) {
+                    results.add("no available options");
+                    ArrayAdapter<String> emptyItemsAdapter = new ArrayAdapter<String>(MainActivity.this,
+                            android.R.layout.simple_list_item_1, results);
+                    listView.setAdapter(emptyItemsAdapter);
+                }
 
                 else {
-                    Permutations.combine(letterBank, new StringBuffer(), 0);
-                    for (String str : Permutations.combinations) {
-                        Permutations.allPermutations.addAll(Permutations.permutation(str));
-                    }
+                    Sort.sortAlphabetically(results);
+                    //String TAG = "Value of results: ";
+                    //Log.i(TAG, results.toString());
+                    ArrayAdapter<String> itemsAdapter =
+                            new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, results);
+                    listView.setAdapter(itemsAdapter);
 
-                    for (int i = 0; i < Permutations.allPermutations.size(); i++) {
-                        String possibleWord = Permutations.allPermutations.get(i).toUpperCase();
-                        int hash = possibleWord.hashCode();
-                        if (Permutations.dictionary.get(hash) != null) {
-                            Permutations.matches.add(Permutations.dictionary.get(hash));
+                    //the code for retrieving the dictionary definition of word is below-----------------
+                    listView.setOnItemClickListener(new OnItemClickListener() {
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            onClickItem = (listView.getItemAtPosition(position).toString().toLowerCase());
+                            //the API callbacktask occurs here.  Works with lines 47-52 and 427-454.
+                            new CallbackTask().execute(dictionaryEntries());
                         }
-                    }
-                    Set<String> s = new HashSet<String>(Permutations.matches);
-                    ArrayList<String> results = new ArrayList<String>(s);
-
-                    Permutations.reorderedMatches = results;
-
-                    for (int i = 0; i < results.size(); i++) {
-                        if (results.get(i).length() > letterBank.length()) {
-                            results.remove(i);
-                        }
-                    }
-                    for (int i = 0; i < results.size(); i++) {
-                        if (!Sort.containsAllChars(letterBank, results.get(i).toLowerCase())) {
-                            results.remove(i);
-                        }
-                    }
-
-                    //display no results found in listview if no results found
-                    if (results.isEmpty()) {
-                        results.add("no available options");
-                        ArrayAdapter<String> emptyItemsAdapter = new ArrayAdapter<String>(MainActivity.this,
-                                android.R.layout.simple_list_item_1, results);
-                        listView.setAdapter(emptyItemsAdapter);
-                    }
-
-                    else {
-                        Sort.sortAlphabetically(results);
-                        //String TAG = "Value of results: ";
-                        //Log.i(TAG, results.toString());
-                        ArrayAdapter<String> itemsAdapter =
-                                new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, results);
-                        listView.setAdapter(itemsAdapter);
-
-                        //the code for retrieving the dictionary definition of word is below-----------------
-                        listView.setOnItemClickListener(new OnItemClickListener() {
-                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                onClickItem = (listView.getItemAtPosition(position).toString().toLowerCase());
-                                //the API callbacktask occurs here.  Works with lines 47-52 and 427-454.
-                                new CallbackTask().execute(dictionaryEntries());
-                            }
-                        });
-                        //end API code section----------------------------------------------------------------
-                    }
+                    });
+                    //end API code section----------------------------------------------------------------
                 }
+            }
             }
         });
 
