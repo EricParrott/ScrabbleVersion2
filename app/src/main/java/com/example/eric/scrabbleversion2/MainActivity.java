@@ -199,14 +199,8 @@ public class MainActivity extends AppCompatActivity {
                         listView.setOnItemClickListener(new OnItemClickListener() {
                             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                                 onClickItem = (listView.getItemAtPosition(position).toString().toLowerCase());
+                                //the API callbacktask occurs here.  Works with lines 47-52 and 427-454.
                                 new CallbackTask().execute(dictionaryEntries());
-
-                                Context context = getApplicationContext();
-                                int duration = Toast.LENGTH_LONG;
-                                Toast toast = Toast.makeText(context, definition, duration);
-                                toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0,0);
-                                toast.show();
-                                definition="";
                             }
                         });
                         //end API code section----------------------------------------------------------------
@@ -425,7 +419,8 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
             //Log.e("JSON String", result);
-            //parse json here to retrieve definition
+
+            //parse json here to retrieve and show definition to user
             try {
                 JSONObject first = new JSONObject(result);
 
@@ -444,6 +439,13 @@ public class MainActivity extends AppCompatActivity {
                 JSONArray definitionsArray = sensesObj.getJSONArray("definitions");
                 definition = definitionsArray.get(0).toString();
 
+                Context context = getApplicationContext();
+                int duration = Toast.LENGTH_LONG;
+                Toast toast = Toast.makeText(context, definition, duration);
+                toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0,0);
+                toast.show();
+
+                //definition="";
                 //Log.e("word definition", definition);
 
             } catch (JSONException e) {
