@@ -40,7 +40,9 @@ import javax.net.ssl.HttpsURLConnection;
 import static com.example.eric.scrabbleversion2.Permutations.reorderedMatches;
 
 public class MainActivity extends AppCompatActivity {
+
     private String onClickItem;
+    private String definition;
 
     private String dictionaryEntries() {
         final String language = "en";
@@ -198,6 +200,13 @@ public class MainActivity extends AppCompatActivity {
                             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                                 onClickItem = (listView.getItemAtPosition(position).toString().toLowerCase());
                                 new CallbackTask().execute(dictionaryEntries());
+
+                                Context context = getApplicationContext();
+                                int duration = Toast.LENGTH_LONG;
+                                Toast toast = Toast.makeText(context, definition, duration);
+                                toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0,0);
+                                toast.show();
+                                definition="";
                             }
                         });
                         //end API code section----------------------------------------------------------------
@@ -385,7 +394,6 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... params) {
 
-            //TODO: replace with your own app id and app key
             final String app_id = "99ec26a8";
             final String app_key = "2704b58d2e5a86093e6e76611550868d";
             try {
@@ -416,7 +424,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-            Log.e("JSON String", result);
+            //Log.e("JSON String", result);
             //parse json here to retrieve definition
             try {
                 JSONObject first = new JSONObject(result);
@@ -434,9 +442,9 @@ public class MainActivity extends AppCompatActivity {
                 JSONObject sensesObj = sensesArray.getJSONObject(0);
 
                 JSONArray definitionsArray = sensesObj.getJSONArray("definitions");
-                String definition = definitionsArray.get(0).toString();
+                definition = definitionsArray.get(0).toString();
 
-                Log.e("json bit", definition);
+                //Log.e("word definition", definition);
 
             } catch (JSONException e) {
                 Log.e("MYAPP", "unexpected JSON exception", e);
