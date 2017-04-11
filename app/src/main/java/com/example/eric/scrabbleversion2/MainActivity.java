@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -415,10 +416,28 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
+            Log.e("JSON String", result);
+            //parse json here to retrieve definition
             try {
-                String TAG = "JSON object: ";
-                Log.i(TAG, result);
-                JSONObject jsonObject = new JSONObject(result);
+                JSONObject first = new JSONObject(result);
+
+                JSONArray resultsArray = first.getJSONArray("results");
+                JSONObject resultsObj = resultsArray.getJSONObject(0);
+
+                JSONArray lexEntriesArray = resultsObj.getJSONArray("lexicalEntries");
+                JSONObject lexEntriesObj = lexEntriesArray.getJSONObject(0);
+
+                JSONArray entriesArray = lexEntriesObj.getJSONArray("entries");
+                JSONObject entriesObj = entriesArray.getJSONObject(0);
+
+                JSONArray sensesArray = entriesObj.getJSONArray("senses");
+                JSONObject sensesObj = sensesArray.getJSONObject(0);
+
+                JSONArray definitionsArray = sensesObj.getJSONArray("definitions");
+                String definition = definitionsArray.get(0).toString();
+
+                Log.e("json bit", definition);
+
             } catch (JSONException e) {
                 Log.e("MYAPP", "unexpected JSON exception", e);
                 // Do something to recover ... or kill the app.
