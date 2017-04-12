@@ -448,7 +448,7 @@ public class MainActivity extends AppCompatActivity {
                 //Log.e("word definition", definition);
 
             } catch (JSONException e) {
-                Log.e("MYAPP", "unexpected JSON exception", e);
+                Log.e("Scrabble Companion", "unexpected JSON exception", e);
                 // Do something to recover ... or kill the app.
             }
         }
