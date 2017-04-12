@@ -1,14 +1,10 @@
 package com.example.eric.scrabbleversion2;
 
-/**
- * Created by Eric on 3/2/2017.
- */
-
-
 import java.util.Comparator;
 
 /**
  * Created by Eric on 2/28/2017.
+ * Updated 4/12/17
  */
 
 public class WordScoreComparator extends Sort implements Comparator<String> {

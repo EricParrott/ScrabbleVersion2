@@ -1,9 +1,5 @@
 package com.example.eric.scrabbleversion2;
 
-/**
- * Created by Eric on 3/2/2017.
- */
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -11,6 +7,7 @@ import java.util.Set;
 
 /**
  * Created by Eric on 2/28/2017.
+ * Updated 4/12/17
  */
 
 public class Sort {

@@ -9,7 +9,9 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -19,8 +21,6 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.android.gms.common.api.GoogleApiClient;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -54,8 +54,9 @@ public class MainActivity extends AppCompatActivity {
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
+     *
     private GoogleApiClient client;
+    */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
 
         //read in file chunk and populate hashtable chunk---------------------------------------
         BufferedReader reader;
-        ArrayList<String> dictionaryArrayList = new ArrayList<String>();
+        ArrayList<String> dictionaryArrayList = new ArrayList<>();
         try {
             final InputStream file = getAssets().open("dictionary2.txt");
             reader = new BufferedReader(new InputStreamReader(file));
@@ -162,8 +163,8 @@ public class MainActivity extends AppCompatActivity {
                         Permutations.matches.add(Permutations.dictionary.get(hash));
                     }
                 }
-                Set<String> s = new HashSet<String>(Permutations.matches);
-                ArrayList<String> results = new ArrayList<String>(s);
+                Set<String> s = new HashSet<>(Permutations.matches);
+                ArrayList<String> results = new ArrayList<>(s);
 
                 Permutations.reorderedMatches = results;
 
@@ -181,7 +182,7 @@ public class MainActivity extends AppCompatActivity {
                 //display no results found in listview if no results found
                 if (results.isEmpty()) {
                     results.add("no available options");
-                    ArrayAdapter<String> emptyItemsAdapter = new ArrayAdapter<String>(MainActivity.this,
+                    ArrayAdapter<String> emptyItemsAdapter = new ArrayAdapter<>(MainActivity.this,
                             android.R.layout.simple_list_item_1, results);
                     listView.setAdapter(emptyItemsAdapter);
                 }
@@ -191,7 +192,7 @@ public class MainActivity extends AppCompatActivity {
                     //String TAG = "Value of results: ";
                     //Log.i(TAG, results.toString());
                     ArrayAdapter<String> itemsAdapter =
-                            new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, results);
+                            new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_list_item_1, results);
                     listView.setAdapter(itemsAdapter);
 
                     //the code for retrieving the dictionary definition of word is below-----------------
@@ -214,19 +215,19 @@ public class MainActivity extends AppCompatActivity {
                 if (selectedItem.equals("alphabetized")) {
                     Sort.sortAlphabetically(reorderedMatches);
                     ArrayAdapter<String> itemsAdapter =
-                            new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, Permutations.reorderedMatches);
+                            new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_list_item_1, Permutations.reorderedMatches);
                     listView.setAdapter(itemsAdapter);
                 }
                 if (selectedItem.equals("byLength")) {
                     Sort.sortByWordLength(reorderedMatches);
                     ArrayAdapter<String> itemsAdapter =
-                            new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, Permutations.reorderedMatches);
+                            new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_list_item_1, Permutations.reorderedMatches);
                     listView.setAdapter(itemsAdapter);
                 }
                 if (selectedItem.equals("byScore")) {
                     Sort.sortByWordScore(reorderedMatches);
                     ArrayAdapter<String> itemsAdapter =
-                            new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, Permutations.reorderedMatches);
+                            new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_list_item_1, Permutations.reorderedMatches);
                     listView.setAdapter(itemsAdapter);
                 }
             } // to close the onItemSelected
@@ -356,7 +357,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFinish() {
-                timerDisplay.setText("Time's Up");
+                timerDisplay.setText(R.string.endTimer);
             }
         };
 
@@ -375,7 +376,7 @@ public class MainActivity extends AppCompatActivity {
                 countDownTimer.cancel();
                 startTimerButton.setEnabled(true);
                 stopTimerButton.setEnabled(false);
-                timerDisplay.setText("180");
+                timerDisplay.setText(R.string.defaultTimeRemaining);
             }
         });
         //end timer chunk--------------------------------------------------------------------------------------
@@ -438,10 +439,22 @@ public class MainActivity extends AppCompatActivity {
                 JSONArray definitionsArray = sensesObj.getJSONArray("definitions");
                 definition = definitionsArray.get(0).toString();
 
-                Context context = getApplicationContext();
-                int duration = Toast.LENGTH_LONG;
-                Toast toast = Toast.makeText(context, definition, duration);
-                toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0,0);
+//                Context context = getApplicationContext();
+//                int duration = Toast.LENGTH_LONG;
+//                Toast toast = Toast.makeText(context, definition, duration);
+//                toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0,0);
+//                toast.show();
+
+                //custom toast to show desired font and background color
+                LayoutInflater inflater = getLayoutInflater();
+                View layout = inflater.inflate(R.layout.custom_toast,
+                        (ViewGroup) findViewById(R.id.custom_toast_container));
+                TextView text = (TextView) layout.findViewById(R.id.definitionText);
+                text.setText(definition);
+                Toast toast = new Toast(getApplicationContext());
+                toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+                toast.setDuration(Toast.LENGTH_LONG);
+                toast.setView(layout);
                 toast.show();
 
                 //definition="";

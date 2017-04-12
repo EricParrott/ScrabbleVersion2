@@ -2,17 +2,23 @@
 
     <string name="app_name">iCheat</string>
     <string name="myLetters">My Letters:</string>
+    <string name="bankHint">your letters here</string>
+    <string name="charWarning">alphabetic characters only!</string>
+    <string name="emptyStringWarning">add letters before searching for results.</string>
+    <string name="findWords">FIND WORDS</string>
+
     <string name="player1">P1</string>
     <string name="player2">P2</string>
     <string name="player3">P3</string>
     <string name="player4">P4</string>
-    <string name="findWords">FIND WORDS</string>
+    <string name="addPtsHint">add pts</string>
     <string name="initialScore">0</string>
+
+
     <string name="startTimer">Start Timer</string>
     <string name="resetTimer">Reset</string>
     <string name="defaultTimeRemaining">180</string>
-    <string name="addPtsHint">add pts</string>
-    <string name="bankHint">your letters here</string>
+    <string name="endTimer">Time\'s Up</string>
 
     <string-array name="sort_array">
         <item>alphabetized</item>

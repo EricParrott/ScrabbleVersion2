@@ -1,24 +1,21 @@
 package com.example.eric.scrabbleversion2;
 
-/**
- * Created by Eric on 3/2/2017.
- */
-
 import java.util.ArrayList;
 import java.util.Hashtable;
 
 /**
  * Created by Eric on 2/28/2017.
+ * Updated 4/12/17
  */
 
 public class Permutations extends MainActivity {
     //data structures definitions
-    static Hashtable<Integer, String> dictionary = new Hashtable<Integer, String>();
+    static Hashtable<Integer, String> dictionary = new Hashtable<>();
 
-    static ArrayList<String> combinations = new ArrayList<String>();
-    static ArrayList<String> allPermutations = new ArrayList<String>();
-    static ArrayList<String> matches = new ArrayList<String>();
-    static ArrayList<String> reorderedMatches = new ArrayList<String>();
+    static ArrayList<String> combinations = new ArrayList<>();
+    static ArrayList<String> allPermutations = new ArrayList<>();
+    static ArrayList<String> matches = new ArrayList<>();
+    static ArrayList<String> reorderedMatches = new ArrayList<>();
     //returns all combinations given a string
     static void combine(String instr, StringBuffer outstr, int index) {
         for (int i = index; i < instr.length(); i++) {
@@ -32,7 +29,7 @@ public class Permutations extends MainActivity {
 
     //returns all the permutations of a given string
     public static ArrayList<String> permutation(String s) {
-        ArrayList<String> res = new ArrayList<String>();
+        ArrayList<String> res = new ArrayList<>();
         if (s.length() == 1) {
             res.add(s);
         } else if (s.length() > 1) {
@@ -46,7 +43,7 @@ public class Permutations extends MainActivity {
 
     //sub-routine of permutation method above
     public static ArrayList<String> merge(ArrayList<String> list, String c) {
-        ArrayList<String> res = new ArrayList<String>();
+        ArrayList<String> res = new ArrayList<>();
         for (String s : list) {
             for (int i = 0; i <= s.length(); ++i) {
                 String ps = new StringBuffer(s).insert(i, c).toString();
@@ -61,12 +58,12 @@ public class Permutations extends MainActivity {
 
         String letters = "abcd";
         combine(letters, new StringBuffer(), 0);
-        ArrayList<String> TestfinalList = new ArrayList<String>();
+        ArrayList<String> testFinalList = new ArrayList<>();
         for (String str: combinations) {
-            TestfinalList.addAll(permutation(str));
+            testFinalList.addAll(permutation(str));
         }
         System.out.println("Combinations: " + combinations);
-        System.out.println("Permutations: " + TestfinalList.toString());
+        System.out.println("Permutations: " + testFinalList.toString());
 
     }
 }
