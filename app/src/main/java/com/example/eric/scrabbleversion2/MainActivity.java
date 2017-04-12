@@ -1,6 +1,5 @@
 package com.example.eric.scrabbleversion2;
 
-import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -42,7 +41,6 @@ import static com.example.eric.scrabbleversion2.Permutations.reorderedMatches;
 public class MainActivity extends AppCompatActivity {
 
     private String onClickItem;
-    private String definition;
 
     private String dictionaryEntries() {
         final String language = "en";
@@ -63,6 +61,13 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //the below chunk is used for my custom toasts.------------------------------
+        LayoutInflater inflater = getLayoutInflater();
+        final View layout = inflater.inflate(R.layout.custom_toast,
+                (ViewGroup) findViewById(R.id.custom_toast_container));
+        final TextView text = (TextView) layout.findViewById(R.id.definitionText);
+        //end chunk------------------------------------------------------------------
 
         Button findResults = (Button) findViewById(R.id.find_results_button);
         final Button startTimerButton = (Button) findViewById(R.id.start_timer_button);
@@ -132,20 +137,20 @@ public class MainActivity extends AppCompatActivity {
             EditText input_letters = (EditText) findViewById(R.id.input_letters);
             String letterBank = input_letters.getText().toString().toLowerCase();
             if (!letterBank.matches("[a-zA-Z]*")) {
-                Context context = getApplicationContext();
-                CharSequence text = "alphabetic characters only!";
-                int duration = Toast.LENGTH_SHORT;
-                Toast toast = Toast.makeText(context, text, duration);
-                toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0,0);
+                text.setText(R.string.charWarning);
+                Toast toast = new Toast(getApplicationContext());
+                toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+                toast.setDuration(Toast.LENGTH_LONG);
+                toast.setView(layout);
                 toast.show();
             }
 
             else if (letterBank.isEmpty()) {
-                Context context = getApplicationContext();
-                CharSequence text = "add letters before searching for results.";
-                int duration = Toast.LENGTH_SHORT;
-                Toast toast = Toast.makeText(context, text, duration);
-                toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0,0);
+                text.setText(R.string.emptyStringWarning);
+                Toast toast = new Toast(getApplicationContext());
+                toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+                toast.setDuration(Toast.LENGTH_LONG);
+                toast.setView(layout);
                 toast.show();
             }
             //end of input handling.  If input passes handling requisites, the below code will execute.----
@@ -347,7 +352,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //this chunk works the simple timer--------------------------------------------------------------------
+        //this chunk works the simple timer---------------------------------------------------------
         final CountDownTimer countDownTimer;
         countDownTimer = new CountDownTimer(180 * 1000, 1000) {
             @Override
@@ -379,7 +384,7 @@ public class MainActivity extends AppCompatActivity {
                 timerDisplay.setText(R.string.defaultTimeRemaining);
             }
         });
-        //end timer chunk--------------------------------------------------------------------------------------
+        //end timer chunk---------------------------------------------------------------------------
     }
 
     //this chunk here is for the API call
@@ -437,15 +442,10 @@ public class MainActivity extends AppCompatActivity {
                 JSONObject sensesObj = sensesArray.getJSONObject(0);
 
                 JSONArray definitionsArray = sensesObj.getJSONArray("definitions");
-                definition = definitionsArray.get(0).toString();
+                String definition = definitionsArray.get(0).toString();
 
-//                Context context = getApplicationContext();
-//                int duration = Toast.LENGTH_LONG;
-//                Toast toast = Toast.makeText(context, definition, duration);
-//                toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0,0);
-//                toast.show();
-
-                //custom toast to show desired font and background color
+                //custom toast to show desired font and background color, also declared
+                //at the beginning of the file because i could not access in this inner class.
                 LayoutInflater inflater = getLayoutInflater();
                 View layout = inflater.inflate(R.layout.custom_toast,
                         (ViewGroup) findViewById(R.id.custom_toast_container));

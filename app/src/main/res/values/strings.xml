@@ -1,11 +1,12 @@
 <resources>
 
     <string name="app_name">iCheat</string>
-    <string name="myLetters">My Letters:</string>
+
     <string name="bankHint">your letters here</string>
+
+    <string name="findWords">FIND WORDS</string>
     <string name="charWarning">alphabetic characters only!</string>
     <string name="emptyStringWarning">add letters before searching for results.</string>
-    <string name="findWords">FIND WORDS</string>
 
     <string name="player1">P1</string>
     <string name="player2">P2</string>
