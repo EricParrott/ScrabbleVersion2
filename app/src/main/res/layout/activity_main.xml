@@ -12,18 +12,6 @@
     android:background="@android:color/background_dark"
     tools:context="com.example.eric.scrabbleversion2.MainActivity">
 
-    <!--
-    <TextView
-        android:id="@+id/firstText"
-        android:layout_width="115dp"
-        android:layout_height="20dp"
-        android:text="@string/myLetters"
-        android:fontFamily="casual"
-        android:textStyle="normal|bold"
-        android:background="@android:color/background_dark"
-        android:textColor="@android:color/background_light" />
-    -->
-
     <EditText
         android:id="@+id/input_letters"
         android:layout_width="match_parent"
@@ -36,19 +24,19 @@
         android:maxLength="8"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        android:textSize="15sp"
+        android:textSize="20sp"
         android:textStyle="normal|bold"
         android:typeface="normal" />
 
     <Button
         android:id="@+id/find_results_button"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="50dp"
         android:text="@string/findWords"
         android:fontFamily="casual"
         android:textStyle="normal|bold"
         style="@style/Widget.AppCompat.Button.Colored"
-        android:elevation="0dp" />
+        />
 
     <ListView
         android:id="@+id/listView"
@@ -80,7 +68,7 @@
             android:id="@+id/button1"
             style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_height="50dp"
             android:layout_column="0"
             android:layout_row="0"
             android:fontFamily="casual"
@@ -91,7 +79,7 @@
             android:id="@+id/button2"
             style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_height="50dp"
             android:layout_column="1"
             android:fontFamily="casual"
             android:text="@string/player2"
@@ -101,7 +89,7 @@
             android:id="@+id/button3"
             style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_height="50dp"
             android:layout_column="2"
             android:fontFamily="casual"
             android:text="@string/player3"
@@ -111,7 +99,7 @@
             android:id="@+id/button4"
             style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_height="50dp"
             android:layout_column="3"
             android:fontFamily="casual"
             android:text="@string/player4"
@@ -127,7 +115,7 @@
         tools:context=".GridLayoutActivity"
         android:layout_height="50dp"
         android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
+        android:layout_marginBottom="10dp"
        >
 
         <EditText
@@ -259,43 +247,45 @@
     </GridLayout>
 
     <GridLayout
+
         android:id="@+id/gridLayout3"
         android:layout_width="fill_parent"
+        android:layout_height="60dp"
         android:columnCount="3"
-        android:rowCount="1"
-        android:layout_height="fill_parent">
+        android:rowCount="1">
 
         <Button
             android:id="@+id/start_timer_button"
-            android:layout_gravity="start|top"
-            android:text="@string/startTimer"
-            android:fontFamily="casual"
-            android:textStyle="normal|bold"
-            android:layout_row="0"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_height="50dp"
             android:layout_column="0"
-            style="@style/Widget.AppCompat.Button.Colored"/>
+            android:layout_gravity="start|top"
+            android:layout_row="0"
+            android:fontFamily="casual"
+            android:text="@string/startTimer"
+            android:textStyle="normal|bold" />
 
         <Button
             android:id="@+id/stop_timer_button"
-            android:layout_gravity="start|top"
-            android:text="@string/resetTimer"
-            android:fontFamily="casual"
-            android:textStyle="normal|bold"
-            android:layout_row="0"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_height="50dp"
             android:layout_column="1"
-            style="@style/Widget.AppCompat.Button.Colored"/>
+            android:layout_gravity="start|top"
+            android:layout_row="0"
+            android:fontFamily="casual"
+            android:text="@string/resetTimer"
+            android:textStyle="normal|bold" />
 
         <TextView
-            android:text="@string/defaultTimeRemaining"
+            android:id="@+id/count_down_timer"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
-            android:id="@+id/count_down_timer"
             android:layout_column="2"
             android:fontFamily="casual"
+            android:text="@string/defaultTimeRemaining"
             android:textColor="@android:color/background_light"
             android:textSize="30sp"
-            android:textStyle="normal|bold"
-            />
+            android:textStyle="normal|bold" />
     </GridLayout>
 
 </LinearLayout>
