@@ -234,6 +234,7 @@ public class MainActivity extends AppCompatActivity {
                     ArrayAdapter<String> itemsAdapter =
                             new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_list_item_1, Permutations.reorderedMatches);
                     listView.setAdapter(itemsAdapter);
+                    Log.i("Sorted By Score", reorderedMatches.toString());
                 }
             } // to close the onItemSelected
 
@@ -423,7 +424,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-            //Log.e("JSON String", result);
+            //Log.i("JSON String", result);
 
             //parse json here to retrieve and show definition to user
             try {
@@ -458,7 +459,7 @@ public class MainActivity extends AppCompatActivity {
                 toast.show();
 
                 //definition="";
-                //Log.e("word definition", definition);
+                //Log.i("word definition", definition);
 
             } catch (JSONException e) {
                 Log.e("Scrabble Companion", "unexpected JSON exception", e);
