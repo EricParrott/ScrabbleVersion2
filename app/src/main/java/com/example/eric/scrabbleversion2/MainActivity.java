@@ -186,7 +186,12 @@ public class MainActivity extends AppCompatActivity {
 
                 //display no results found in listview if no results found
                 if (results.isEmpty()) {
-                    results.add("no available options");
+                    text.setText(R.string.noResultsFound);
+                    Toast toast = new Toast(getApplicationContext());
+                    toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+                    toast.setDuration(Toast.LENGTH_LONG);
+                    toast.setView(layout);
+                    toast.show();
                     ArrayAdapter<String> emptyItemsAdapter = new ArrayAdapter<>(MainActivity.this,
                             android.R.layout.simple_list_item_1, results);
                     listView.setAdapter(emptyItemsAdapter);
@@ -451,7 +456,9 @@ public class MainActivity extends AppCompatActivity {
                 View layout = inflater.inflate(R.layout.custom_toast,
                         (ViewGroup) findViewById(R.id.custom_toast_container));
                 TextView text = (TextView) layout.findViewById(R.id.definitionText);
-                text.setText(definition);
+                int score = Sort.getWordScore(onClickItem);
+
+                text.setText(definition + " - (" + score + " pts)");
                 Toast toast = new Toast(getApplicationContext());
                 toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
                 toast.setDuration(Toast.LENGTH_LONG);
@@ -462,6 +469,21 @@ public class MainActivity extends AppCompatActivity {
                 //Log.i("word definition", definition);
 
             } catch (JSONException e) {
+                //custom toast to show desired font and background color, also declared
+                //at the beginning of the file because i could not access in this inner class.
+                LayoutInflater inflater = getLayoutInflater();
+                View layout = inflater.inflate(R.layout.custom_toast,
+                        (ViewGroup) findViewById(R.id.custom_toast_container));
+                TextView text = (TextView) layout.findViewById(R.id.definitionText);
+
+                int score = Sort.getWordScore(onClickItem);
+
+                text.setText("No definition found. Try in singular form. (" + score + " pts)");
+                Toast toast = new Toast(getApplicationContext());
+                toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+                toast.setDuration(Toast.LENGTH_LONG);
+                toast.setView(layout);
+                toast.show();
                 Log.e("Scrabble Companion", "unexpected JSON exception", e);
                 // Do something to recover ... or kill the app.
             }

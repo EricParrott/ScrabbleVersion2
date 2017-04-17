@@ -7,6 +7,7 @@
     <string name="findWords">FIND WORDS</string>
     <string name="charWarning">alphabetic characters only!</string>
     <string name="emptyStringWarning">add letters before searching for results.</string>
+    <string name="noResultsFound">no results found.</string>
 
     <string name="player1">P1</string>
     <string name="player2">P2</string>
