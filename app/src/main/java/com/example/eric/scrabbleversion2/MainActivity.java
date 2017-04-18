@@ -75,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
         final Button stopTimerButton = (Button) findViewById(R.id.stop_timer_button);
         stopTimerButton.setEnabled(false);
         final ListView listView = (ListView) findViewById(R.id.listView);
+        final TextView customTextView = (TextView) findViewById(R.id.custom_text_view);
 
         final Button p1 = (Button) findViewById(R.id.button1);
         final Button p2 = (Button) findViewById(R.id.button2);
@@ -193,7 +194,7 @@ public class MainActivity extends AppCompatActivity {
                     toast.setView(layout);
                     toast.show();
                     ArrayAdapter<String> emptyItemsAdapter = new ArrayAdapter<>(MainActivity.this,
-                            android.R.layout.simple_list_item_1, results);
+                            R.layout.custom_listview, results);
                     listView.setAdapter(emptyItemsAdapter);
                 }
 
@@ -202,7 +203,7 @@ public class MainActivity extends AppCompatActivity {
                     //String TAG = "Value of results: ";
                     //Log.i(TAG, results.toString());
                     ArrayAdapter<String> itemsAdapter =
-                            new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_list_item_1, results);
+                            new ArrayAdapter<>(MainActivity.this, R.layout.custom_listview, results);
                     listView.setAdapter(itemsAdapter);
 
                     //the code for retrieving the dictionary definition of word is below-----------------
@@ -225,19 +226,19 @@ public class MainActivity extends AppCompatActivity {
                 if (selectedItem.equals("alphabetized")) {
                     Sort.sortAlphabetically(reorderedMatches);
                     ArrayAdapter<String> itemsAdapter =
-                            new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_list_item_1, Permutations.reorderedMatches);
+                            new ArrayAdapter<>(MainActivity.this, R.layout.custom_listview, Permutations.reorderedMatches);
                     listView.setAdapter(itemsAdapter);
                 }
                 if (selectedItem.equals("byLength")) {
                     Sort.sortByWordLength(reorderedMatches);
                     ArrayAdapter<String> itemsAdapter =
-                            new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_list_item_1, Permutations.reorderedMatches);
+                            new ArrayAdapter<>(MainActivity.this, R.layout.custom_listview, Permutations.reorderedMatches);
                     listView.setAdapter(itemsAdapter);
                 }
                 if (selectedItem.equals("byScore")) {
                     Sort.sortByWordScore(reorderedMatches);
                     ArrayAdapter<String> itemsAdapter =
-                            new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_list_item_1, Permutations.reorderedMatches);
+                            new ArrayAdapter<>(MainActivity.this, R.layout.custom_listview, Permutations.reorderedMatches);
                     listView.setAdapter(itemsAdapter);
                     Log.i("Sorted By Score", reorderedMatches.toString());
                 }

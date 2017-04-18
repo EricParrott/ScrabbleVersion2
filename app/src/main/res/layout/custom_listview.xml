@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView
+    android:id="@+id/custom_text_view"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:background="#e0e0eb"
+    android:fontFamily="casual"
+    android:textSize="20sp"
+    android:textStyle="normal|bold"
+    android:textColor="#000000"
+    android:textAlignment="center"
+    android:layout_height="50dp"
+    >
+</TextView>

@@ -42,7 +42,6 @@
         android:id="@+id/listView"
         android:layout_width="match_parent"
         android:background="#e0e0eb"
-        android:fontFamily="casual"
         android:layout_height="200dp">
     </ListView>
 
