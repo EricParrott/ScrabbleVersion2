@@ -40,10 +40,13 @@ import static com.example.eric.scrabbleversion2.Permutations.reorderedMatches;
 
 public class MainActivity extends AppCompatActivity {
 
+    //parseCounter is used to control which portion of the onPostExecute method should run
+    //since both callbacktasks inflections() and dictionaryEntries() use it.
+    private int parseCounter = 0;
     private String onClickItem;
     private String baseWord;
 
-    //you need to call inflections first to retrieve base word from api
+    //you need to call inflections first to retrieve base word (lemma) from api
     private String inflections() {
         final String language = "en";
         final String word = this.onClickItem;
@@ -51,10 +54,11 @@ public class MainActivity extends AppCompatActivity {
         return "https://od-api.oxforddictionaries.com:443/api/v1/inflections/" + language + "/" + word_id;
     }
 
-    //once you have base word you can call dictionaryentries to find the definition of base word
+    //once you have the lemma from the first task,
+    // you can call dictionaryEntries to find the definition of base word
     private String dictionaryEntries() {
         final String language = "en";
-        final String word = this.onClickItem;
+        final String word = this.baseWord;
         final String word_id = word.toLowerCase(); //word id is case sensitive and lowercase is required
         return "https://od-api.oxforddictionaries.com:443/api/v1/entries/" + language + "/" + word_id + "/definitions";
     }
@@ -85,7 +89,6 @@ public class MainActivity extends AppCompatActivity {
         final Button stopTimerButton = (Button) findViewById(R.id.stop_timer_button);
         stopTimerButton.setEnabled(false);
         final ListView listView = (ListView) findViewById(R.id.listView);
-        final TextView customTextView = (TextView) findViewById(R.id.custom_text_view);
 
         final Button p1 = (Button) findViewById(R.id.button1);
         final Button p2 = (Button) findViewById(R.id.button2);
@@ -106,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
         //read in file chunk and populate hashtable chunk---------------------------------------
         BufferedReader reader;
         ArrayList<String> dictionaryArrayList = new ArrayList<>();
+
         try {
             final InputStream file = getAssets().open("dictionary2.txt");
             reader = new BufferedReader(new InputStreamReader(file));
@@ -117,7 +121,8 @@ public class MainActivity extends AppCompatActivity {
                 }
                 line = reader.readLine();
             }
-        } catch (IOException ioe) {
+        }
+        catch (IOException ioe) {
             ioe.printStackTrace();
         }
         for (int i = 0; i < dictionaryArrayList.size(); i++) {
@@ -128,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
         //code to create and format spinner goes here-----------------------------------------
         final Spinner spinner = (Spinner) findViewById(R.id.spinner);
         ArrayAdapter<CharSequence> spinAdapter = ArrayAdapter.createFromResource(this,
-                R.array.sort_array, android.R.layout.simple_spinner_dropdown_item);
+                R.array.sort_array, R.layout.custom_spinner);
         spinAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(spinAdapter);
         //-------------------------------------------------------------------------------------
@@ -164,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
                 toast.setView(layout);
                 toast.show();
             }
-            //end of input handling.  If input passes handling requisites, the below code will execute.----
+            //end of input handling.  If input passes handling requisites, the below code will execute.
 
             else {
                 Permutations.combine(letterBank, new StringBuffer(), 0);
@@ -195,7 +200,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
 
-                //display no results found in listview if no results found
+                //display no results found toast if the user has no word options.
                 if (results.isEmpty()) {
                     text.setText(R.string.noResultsFound);
                     Toast toast = new Toast(getApplicationContext());
@@ -216,16 +221,16 @@ public class MainActivity extends AppCompatActivity {
                             new ArrayAdapter<>(MainActivity.this, R.layout.custom_listview, results);
                     listView.setAdapter(itemsAdapter);
 
-                    //the code for retrieving the dictionary definition of word is below-----------------
+                    //the following code executes when a word in the listview is clicked on---------
                     listView.setOnItemClickListener(new OnItemClickListener() {
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                             onClickItem = (listView.getItemAtPosition(position).toString().toLowerCase());
                             //the API callbacktask occurs here.  Works with lines 47-52 and 427-454.
                             //new CallbackTask().execute(inflections());
-                            new CallbackTask().execute(dictionaryEntries());
+                            new CallbackTask().execute(inflections());
                         }
                     });
-                    //end API code section----------------------------------------------------------------
+                    //end onClickItem code section--------------------------------------------------
                 }
             }
             }
@@ -442,45 +447,70 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
             //Log.i("JSON String", result);
-
             //parse json here to retrieve and show definition to user
             try {
-                JSONObject first = new JSONObject(result);
 
-                JSONArray resultsArray = first.getJSONArray("results");
-                JSONObject resultsObj = resultsArray.getJSONObject(0);
+                if ((parseCounter % 2 == 0)) {
+                    JSONObject first = new JSONObject(result);
 
-                JSONArray lexEntriesArray = resultsObj.getJSONArray("lexicalEntries");
-                JSONObject lexEntriesObj = lexEntriesArray.getJSONObject(0);
+                    JSONArray resultsArr = first.getJSONArray("results");
+                    JSONObject resultsObject = resultsArr.getJSONObject(0);
 
-                JSONArray entriesArray = lexEntriesObj.getJSONArray("entries");
-                JSONObject entriesObj = entriesArray.getJSONObject(0);
+                    JSONArray lexEntriesArr = resultsObject.getJSONArray("lexicalEntries");
+                    JSONObject lexEntriesObject = lexEntriesArr.getJSONObject(0);
 
-                JSONArray sensesArray = entriesObj.getJSONArray("senses");
-                JSONObject sensesObj = sensesArray.getJSONObject(0);
+                    JSONArray inflectionsArr = lexEntriesObject.getJSONArray("inflectionOf");
+                    JSONObject lemmaObject = inflectionsArr.getJSONObject(0);
 
-                JSONArray definitionsArray = sensesObj.getJSONArray("definitions");
-                String definition = definitionsArray.get(0).toString();
+                    baseWord = lemmaObject.getString("text");
+                    parseCounter++;
 
-                //custom toast to show desired font and background color, also declared
-                //at the beginning of the file because i could not access in this inner class.
-                LayoutInflater inflater = getLayoutInflater();
-                View layout = inflater.inflate(R.layout.custom_toast,
-                        (ViewGroup) findViewById(R.id.custom_toast_container));
-                TextView text = (TextView) layout.findViewById(R.id.definitionText);
-                int score = Sort.getWordScore(onClickItem);
+                    Log.i("root word: ", "" + baseWord);
+                    Log.i("parseCounter: ", Float.toString(parseCounter));
 
-                text.setText(definition + " - (" + score + " pts)");
-                Toast toast = new Toast(getApplicationContext());
-                toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
-                toast.setDuration(Toast.LENGTH_LONG);
-                toast.setView(layout);
-                toast.show();
+                    new CallbackTask().execute(dictionaryEntries());
 
-                //definition="";
+                }
+                else {
+
+                    Log.i("test", "definition code accessed");
+                    JSONObject first = new JSONObject(result);
+
+                    JSONArray resultsArray = first.getJSONArray("results");
+                    JSONObject resultsObj = resultsArray.getJSONObject(0);
+
+                    JSONArray lexEntriesArray = resultsObj.getJSONArray("lexicalEntries");
+                    JSONObject lexEntriesObj = lexEntriesArray.getJSONObject(0);
+
+                    JSONArray entriesArray = lexEntriesObj.getJSONArray("entries");
+                    JSONObject entriesObj = entriesArray.getJSONObject(0);
+
+                    JSONArray sensesArray = entriesObj.getJSONArray("senses");
+                    JSONObject sensesObj = sensesArray.getJSONObject(0);
+
+                    JSONArray definitionsArray = sensesObj.getJSONArray("definitions");
+                    String definition = definitionsArray.get(0).toString();
+
+                    //custom toast to show desired font and background color, also declared
+                    //at the beginning of the file because i could not access in this inner class.
+                    LayoutInflater inflater = getLayoutInflater();
+                    View layout = inflater.inflate(R.layout.custom_toast,
+                            (ViewGroup) findViewById(R.id.custom_toast_container));
+                    TextView text = (TextView) layout.findViewById(R.id.definitionText);
+                    int score = Sort.getWordScore(onClickItem);
+
+                    text.setText(definition + " - (" + score + " pts)");
+                    Toast toast = new Toast(getApplicationContext());
+                    toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+                    toast.setDuration(Toast.LENGTH_LONG);
+                    toast.setView(layout);
+                    toast.show();
+
+                    parseCounter++;
+                }
                 //Log.i("word definition", definition);
-
-            } catch (JSONException e) {
+            }
+            catch (JSONException e) {
                 //custom toast to show desired font and background color, also declared
                 //at the beginning of the file because i could not access in this inner class.
                 LayoutInflater inflater = getLayoutInflater();
@@ -490,7 +520,7 @@ public class MainActivity extends AppCompatActivity {
 
                 int score = Sort.getWordScore(onClickItem);
 
-                text.setText("No definition found. Try in singular form. (" + score + " pts)");
+                text.setText("No definition found. (" + score + " pts)");
                 Toast toast = new Toast(getApplicationContext());
                 toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
                 toast.setDuration(Toast.LENGTH_LONG);
