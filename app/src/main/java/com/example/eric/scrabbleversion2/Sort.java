@@ -67,7 +67,7 @@ public class Sort {
     }
 
     //this chunk of code is used in Main to filter out any results that contain chars not in letterbank--
-//the logic might be wrong because it isnt working correctly at the moment.
+//the logic might be wrong because it isn't working correctly at the moment.
     public static Set<Character> stringToCharacterSet(String s) {
         Set<Character> set = new HashSet<>();
         for (char c : s.toCharArray()) {
