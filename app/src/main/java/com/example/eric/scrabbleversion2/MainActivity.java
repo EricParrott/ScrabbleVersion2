@@ -41,7 +41,17 @@ import static com.example.eric.scrabbleversion2.Permutations.reorderedMatches;
 public class MainActivity extends AppCompatActivity {
 
     private String onClickItem;
+    private String baseWord;
 
+    //you need to call inflections first to retrieve base word from api
+    private String inflections() {
+        final String language = "en";
+        final String word = this.onClickItem;
+        final String word_id = word.toLowerCase(); //word id is case sensitive and lowercase is required
+        return "https://od-api.oxforddictionaries.com:443/api/v1/inflections/" + language + "/" + word_id;
+    }
+
+    //once you have base word you can call dictionaryentries to find the definition of base word
     private String dictionaryEntries() {
         final String language = "en";
         final String word = this.onClickItem;
@@ -211,6 +221,7 @@ public class MainActivity extends AppCompatActivity {
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                             onClickItem = (listView.getItemAtPosition(position).toString().toLowerCase());
                             //the API callbacktask occurs here.  Works with lines 47-52 and 427-454.
+                            //new CallbackTask().execute(inflections());
                             new CallbackTask().execute(dictionaryEntries());
                         }
                     });
