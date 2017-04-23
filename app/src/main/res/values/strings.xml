@@ -28,4 +28,6 @@
         <item>byScore</item>
     </string-array>
 
+    <string name="casual">casual</string>
+
 </resources>
