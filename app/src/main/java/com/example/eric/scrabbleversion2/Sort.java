@@ -11,7 +11,7 @@ import java.util.Set;
  */
 
 public class Sort {
-    //sorts your word choices and returns an alphabetized array
+
     public static void sortAlphabetically(ArrayList<String> playableWords) {
         Collections.sort(playableWords);
     }
@@ -20,7 +20,6 @@ public class Sort {
         Collections.sort(playableWords, new WordScoreComparator());	//see my WordScoreComparator class
     }
 
-    //sorts your word choices by length and returns the new ordering in an array.
     public static void sortByWordLength(ArrayList<String> playableWords) {
         Collections.sort(playableWords, new WordLengthComparator());
     }

@@ -1,5 +1,6 @@
 package com.example.eric.scrabbleversion2;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 
 /**
@@ -28,4 +29,28 @@ public class WordScoreComparator extends Sort implements Comparator<String> {
             return -1;
         }
     }
+
+
+    public static void main(String[] args) {
+
+        ArrayList<String> testArr = new ArrayList<>();
+
+        testArr.add("do");
+        testArr.add("dog");
+        testArr.add("god");
+        testArr.add("go");
+        testArr.add("gods");
+        testArr.add("dogs");
+        testArr.add("oxen");
+
+        System.out.println("Before sort: " + testArr.toString());
+        sortByWordScore(testArr);
+        System.out.println("After sort: " + testArr.toString());
+
+        for (String str: testArr) {
+            System.out.println(str + ": " + getWordScore(str));
+        }
+    }
 }
+
+

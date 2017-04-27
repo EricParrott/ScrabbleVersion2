@@ -37,6 +37,9 @@ import java.util.Set;
 import javax.net.ssl.HttpsURLConnection;
 
 import static com.example.eric.scrabbleversion2.Permutations.reorderedMatches;
+import static com.example.eric.scrabbleversion2.Sort.sortAlphabetically;
+import static com.example.eric.scrabbleversion2.Sort.sortByWordLength;
+import static com.example.eric.scrabbleversion2.Sort.sortByWordScore;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -214,7 +217,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 else {
-                    Sort.sortAlphabetically(results);
+                    sortAlphabetically(results);
                     //String TAG = "Value of results: ";
                     //Log.i(TAG, results.toString());
                     ArrayAdapter<String> itemsAdapter =
@@ -240,23 +243,24 @@ public class MainActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedItem = parent.getItemAtPosition(position).toString();
                 if (selectedItem.equals("alphabetized")) {
-                    Sort.sortAlphabetically(reorderedMatches);
+                    sortAlphabetically(reorderedMatches);
                     ArrayAdapter<String> itemsAdapter =
-                            new ArrayAdapter<>(MainActivity.this, R.layout.custom_listview, Permutations.reorderedMatches);
+                            new ArrayAdapter<>(MainActivity.this, R.layout.custom_listview, reorderedMatches);
                     listView.setAdapter(itemsAdapter);
                 }
                 if (selectedItem.equals("byLength")) {
-                    Sort.sortByWordLength(reorderedMatches);
+                    sortByWordLength(reorderedMatches);
                     ArrayAdapter<String> itemsAdapter =
-                            new ArrayAdapter<>(MainActivity.this, R.layout.custom_listview, Permutations.reorderedMatches);
+                            new ArrayAdapter<>(MainActivity.this, R.layout.custom_listview, reorderedMatches);
                     listView.setAdapter(itemsAdapter);
                 }
                 if (selectedItem.equals("byScore")) {
-                    Sort.sortByWordScore(reorderedMatches);
+                    Log.i("Before Score Sort", reorderedMatches.toString());
+                    sortByWordScore(reorderedMatches);
                     ArrayAdapter<String> itemsAdapter =
-                            new ArrayAdapter<>(MainActivity.this, R.layout.custom_listview, Permutations.reorderedMatches);
+                            new ArrayAdapter<>(MainActivity.this, R.layout.custom_listview, reorderedMatches);
                     listView.setAdapter(itemsAdapter);
-                    Log.i("Sorted By Score", reorderedMatches.toString());
+                    Log.i("After Score Sort", reorderedMatches.toString());
                 }
             } // to close the onItemSelected
 
@@ -450,6 +454,7 @@ public class MainActivity extends AppCompatActivity {
             //parse json here to retrieve and show definition to user
             try {
 
+                //if parseCounter even
                 if ((parseCounter % 2 == 0)) {
                     JSONObject first = new JSONObject(result);
 
@@ -465,15 +470,19 @@ public class MainActivity extends AppCompatActivity {
                     baseWord = lemmaObject.getString("text");
                     parseCounter++;
 
-                    Log.i("root word: ", "" + baseWord);
-                    Log.i("parseCounter: ", Float.toString(parseCounter));
+                    Log.i("base word", "" + baseWord);
+                    Log.i("parseCounter", Float.toString(parseCounter));
 
                     new CallbackTask().execute(dictionaryEntries());
 
                 }
+
+                //if parseCounter odd
                 else {
 
                     Log.i("test", "definition code accessed");
+                    Log.i("JSON object", result);
+
                     JSONObject first = new JSONObject(result);
 
                     JSONArray resultsArray = first.getJSONArray("results");
@@ -527,6 +536,7 @@ public class MainActivity extends AppCompatActivity {
                 toast.setView(layout);
                 toast.show();
                 Log.e("Scrabble Companion", "unexpected JSON exception", e);
+                parseCounter++;
                 // Do something to recover ... or kill the app.
             }
         }
