@@ -36,14 +36,19 @@ public class WordScoreComparator extends Sort implements Comparator<String> {
         ArrayList<String> testArr = new ArrayList<>();
 
         testArr.add("do");
-        testArr.add("dog");
         testArr.add("god");
         testArr.add("go");
+        testArr.add("oxen");
         testArr.add("gods");
         testArr.add("dogs");
-        testArr.add("oxen");
+        testArr.add("dog");
 
         System.out.println("Before sort: " + testArr.toString());
+
+        for (String str: testArr) {
+            System.out.println(str + ": " + getWordScore(str));
+        }
+
         sortByWordScore(testArr);
         System.out.println("After sort: " + testArr.toString());
 
@@ -52,5 +57,3 @@ public class WordScoreComparator extends Sort implements Comparator<String> {
         }
     }
 }
-
-

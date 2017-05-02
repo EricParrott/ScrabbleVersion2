@@ -1,5 +1,6 @@
 package com.example.eric.scrabbleversion2;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -11,6 +12,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -175,6 +177,10 @@ public class MainActivity extends AppCompatActivity {
             //end of input handling.  If input passes handling requisites, the below code will execute.
 
             else {
+                //first close the soft keyboard from view
+                InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+
                 Permutations.combine(letterBank, new StringBuffer(), 0);
                 for (String str : Permutations.combinations) {
                     Permutations.allPermutations.addAll(Permutations.permutation(str));
@@ -243,24 +249,25 @@ public class MainActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedItem = parent.getItemAtPosition(position).toString();
                 if (selectedItem.equals("alphabetized")) {
+                    Log.i("alpha sort", "clicked");
                     sortAlphabetically(reorderedMatches);
                     ArrayAdapter<String> itemsAdapter =
                             new ArrayAdapter<>(MainActivity.this, R.layout.custom_listview, reorderedMatches);
                     listView.setAdapter(itemsAdapter);
                 }
                 if (selectedItem.equals("byLength")) {
+                    Log.i("length sort", "clicked");
                     sortByWordLength(reorderedMatches);
                     ArrayAdapter<String> itemsAdapter =
                             new ArrayAdapter<>(MainActivity.this, R.layout.custom_listview, reorderedMatches);
                     listView.setAdapter(itemsAdapter);
                 }
                 if (selectedItem.equals("byScore")) {
-                    Log.i("Before Score Sort", reorderedMatches.toString());
+                    Log.i("score sort", "clicked");
                     sortByWordScore(reorderedMatches);
                     ArrayAdapter<String> itemsAdapter =
                             new ArrayAdapter<>(MainActivity.this, R.layout.custom_listview, reorderedMatches);
                     listView.setAdapter(itemsAdapter);
-                    Log.i("After Score Sort", reorderedMatches.toString());
                 }
             } // to close the onItemSelected
 
@@ -470,8 +477,8 @@ public class MainActivity extends AppCompatActivity {
                     baseWord = lemmaObject.getString("text");
                     parseCounter++;
 
-                    Log.i("base word", "" + baseWord);
-                    Log.i("parseCounter", Float.toString(parseCounter));
+                    //Log.i("base word", "" + baseWord);
+                    //Log.i("parseCounter", Float.toString(parseCounter));
 
                     new CallbackTask().execute(dictionaryEntries());
 
@@ -480,8 +487,8 @@ public class MainActivity extends AppCompatActivity {
                 //if parseCounter odd
                 else {
 
-                    Log.i("test", "definition code accessed");
-                    Log.i("JSON object", result);
+                    //Log.i("test", "definition code accessed");
+                    //Log.i("JSON object", result);
 
                     JSONObject first = new JSONObject(result);
 

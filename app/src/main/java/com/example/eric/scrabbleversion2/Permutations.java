@@ -16,6 +16,7 @@ public class Permutations extends MainActivity {
     static ArrayList<String> allPermutations = new ArrayList<>();
     static ArrayList<String> matches = new ArrayList<>();
     static ArrayList<String> reorderedMatches = new ArrayList<>();
+
     //returns all combinations given a string
     static void combine(String instr, StringBuffer outstr, int index) {
         for (int i = index; i < instr.length(); i++) {
@@ -59,11 +60,12 @@ public class Permutations extends MainActivity {
         String letters = "abcd";
         combine(letters, new StringBuffer(), 0);
         ArrayList<String> testFinalList = new ArrayList<>();
+
         for (String str: combinations) {
             testFinalList.addAll(permutation(str));
         }
+
         System.out.println("Combinations: " + combinations);
         System.out.println("Permutations: " + testFinalList.toString());
-
     }
 }
