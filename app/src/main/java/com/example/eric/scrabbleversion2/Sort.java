@@ -24,6 +24,12 @@ public class Sort {
         Collections.sort(playableWords, new WordLengthComparator());
     }
 
+    public static void stringListToLowerCase(ArrayList<String> playableWords) {
+        for (int i=0; i<playableWords.size(); i++) {
+            playableWords.set(i, playableWords.get(i).toLowerCase());
+        }
+    }
+
     //get score for word so as can be sorted by that score later on
     public static int getWordScore(String word) {
         //initialize word score to zero
@@ -79,5 +85,16 @@ public class Sort {
 
     public static boolean containsAllChars(String container, String containee) {
         return stringToCharacterSet(container).containsAll(stringToCharacterSet(containee));
+    }
+
+    public static void main(String[] args) {
+        ArrayList<String> testList = new ArrayList<>();
+        testList.add("ALL");
+        testList.add("THESE");
+        testList.add("WORDS");
+        testList.add("ARE");
+        testList.add("CAPITAL");
+        stringListToLowerCase(testList);
+        System.out.println(testList.toString());
     }
 }

@@ -33,7 +33,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -44,6 +43,7 @@ import static com.example.eric.scrabbleversion2.Sort.getWordScore;
 import static com.example.eric.scrabbleversion2.Sort.sortAlphabetically;
 import static com.example.eric.scrabbleversion2.Sort.sortByWordLength;
 import static com.example.eric.scrabbleversion2.Sort.sortByWordScore;
+import static com.example.eric.scrabbleversion2.Sort.stringListToLowerCase;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -253,6 +253,7 @@ public class MainActivity extends AppCompatActivity {
                 if (selectedItem.equals("alphabetized")) {
                     Log.i("alpha sort", "clicked");
                     sortAlphabetically(reorderedMatches);
+                    stringListToLowerCase(reorderedMatches);
                     ArrayAdapter<String> itemsAdapter =
                             new ArrayAdapter<>(MainActivity.this, R.layout.custom_listview, reorderedMatches);
                     listView.setAdapter(itemsAdapter);
@@ -260,13 +261,14 @@ public class MainActivity extends AppCompatActivity {
                 if (selectedItem.equals("byLength")) {
                     Log.i("length sort", "clicked");
                     sortByWordLength(reorderedMatches);
+                    stringListToLowerCase(reorderedMatches);
                     ArrayAdapter<String> itemsAdapter =
                             new ArrayAdapter<>(MainActivity.this, R.layout.custom_listview, reorderedMatches);
                     listView.setAdapter(itemsAdapter);
                 }
                 if (selectedItem.equals("byScore")) {
                     sortByWordScore(reorderedMatches);
-
+                    stringListToLowerCase(reorderedMatches);
 //                    for (String str: reorderedMatches) {
 //                        Log.i("String", "" + str +" " + getWordScore(str));
 //                    }
@@ -276,7 +278,7 @@ public class MainActivity extends AppCompatActivity {
                     listView.setAdapter(itemsAdapter);
                     //Log.i("score sort", "clicked");
                 }
-            } // to close the onItemSelected
+            }
 
             public void onNothingSelected(AdapterView<?> parent) {
                 //do nothing here
@@ -549,8 +551,9 @@ public class MainActivity extends AppCompatActivity {
                 toast.setDuration(Toast.LENGTH_LONG);
                 toast.setView(layout);
                 toast.show();
-                Log.e("Scrabble Companion", "unexpected JSON exception", e);
                 parseCounter++;
+
+                //Log.e("Scrabble Companion", "unexpected JSON exception", e);
                 // Do something to recover ... or kill the app.
             }
         }
