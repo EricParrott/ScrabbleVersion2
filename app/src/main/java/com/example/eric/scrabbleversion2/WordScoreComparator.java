@@ -1,5 +1,7 @@
 package com.example.eric.scrabbleversion2;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 
@@ -15,7 +17,9 @@ public class WordScoreComparator extends Sort implements Comparator<String> {
     public int compare(String str1, String str2) {
 
         int score1 = getWordScore(str1);
+        //Log.i("str1", "" + score1);
         int score2 = getWordScore(str2);
+        //Log.i("str2", "" + score2);
 
         if (score1 > score2) {
             return 1;
@@ -29,7 +33,6 @@ public class WordScoreComparator extends Sort implements Comparator<String> {
             return -1;
         }
     }
-
 
     public static void main(String[] args) {
 

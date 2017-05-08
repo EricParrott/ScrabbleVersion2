@@ -33,12 +33,14 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.net.ssl.HttpsURLConnection;
 
 import static com.example.eric.scrabbleversion2.Permutations.reorderedMatches;
+import static com.example.eric.scrabbleversion2.Sort.getWordScore;
 import static com.example.eric.scrabbleversion2.Sort.sortAlphabetically;
 import static com.example.eric.scrabbleversion2.Sort.sortByWordLength;
 import static com.example.eric.scrabbleversion2.Sort.sortByWordScore;
@@ -263,11 +265,16 @@ public class MainActivity extends AppCompatActivity {
                     listView.setAdapter(itemsAdapter);
                 }
                 if (selectedItem.equals("byScore")) {
-                    Log.i("score sort", "clicked");
                     sortByWordScore(reorderedMatches);
+
+//                    for (String str: reorderedMatches) {
+//                        Log.i("String", "" + str +" " + getWordScore(str));
+//                    }
+
                     ArrayAdapter<String> itemsAdapter =
                             new ArrayAdapter<>(MainActivity.this, R.layout.custom_listview, reorderedMatches);
                     listView.setAdapter(itemsAdapter);
+                    //Log.i("score sort", "clicked");
                 }
             } // to close the onItemSelected
 
@@ -513,7 +520,7 @@ public class MainActivity extends AppCompatActivity {
                     View layout = inflater.inflate(R.layout.custom_toast,
                             (ViewGroup) findViewById(R.id.custom_toast_container));
                     TextView text = (TextView) layout.findViewById(R.id.definitionText);
-                    int score = Sort.getWordScore(onClickItem);
+                    int score = getWordScore(onClickItem);
 
                     text.setText(definition + " - (" + score + " pts)");
                     Toast toast = new Toast(getApplicationContext());
@@ -534,7 +541,7 @@ public class MainActivity extends AppCompatActivity {
                         (ViewGroup) findViewById(R.id.custom_toast_container));
                 TextView text = (TextView) layout.findViewById(R.id.definitionText);
 
-                int score = Sort.getWordScore(onClickItem);
+                int score = getWordScore(onClickItem);
 
                 text.setText("No definition found. (" + score + " pts)");
                 Toast toast = new Toast(getApplicationContext());

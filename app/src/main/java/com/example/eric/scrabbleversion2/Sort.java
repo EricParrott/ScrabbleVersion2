@@ -31,7 +31,9 @@ public class Sort {
         //for length of the word
         for (int i=0; i<word.length(); i++) {
             //get each character in the word and add its point value to the score variable
-            int charAt = (int)word.charAt(i);
+            //the ascii values are for lowercase so make sure the input word has been converted
+            //to lowercase before calling the method otherwise it will break.
+            int charAt = (int)word.toLowerCase().charAt(i);
             switch (charAt) {
                 case 97:   score += 1;  break;		//if 'a' append 1 pt to word score
                 case 98:   score += 3;  break;		//if 'b' append 3 pts to word score
