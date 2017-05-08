@@ -1,4 +1,4 @@
-package com.example.eric.scrabbleversion2;
+package com.eric.wordwizard;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -7,7 +7,6 @@ import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,12 +37,12 @@ import java.util.Set;
 
 import javax.net.ssl.HttpsURLConnection;
 
-import static com.example.eric.scrabbleversion2.Permutations.reorderedMatches;
-import static com.example.eric.scrabbleversion2.Sort.getWordScore;
-import static com.example.eric.scrabbleversion2.Sort.sortAlphabetically;
-import static com.example.eric.scrabbleversion2.Sort.sortByWordLength;
-import static com.example.eric.scrabbleversion2.Sort.sortByWordScore;
-import static com.example.eric.scrabbleversion2.Sort.stringListToLowerCase;
+import static com.eric.wordwizard.Permutations.reorderedMatches;
+import static com.eric.wordwizard.Sort.getWordScore;
+import static com.eric.wordwizard.Sort.sortAlphabetically;
+import static com.eric.wordwizard.Sort.sortByWordLength;
+import static com.eric.wordwizard.Sort.sortByWordScore;
+import static com.eric.wordwizard.Sort.stringListToLowerCase;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -151,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
             Permutations.matches.clear();
             Permutations.combinations.clear();
             Permutations.allPermutations.clear();
-            Permutations.reorderedMatches.clear();
+            reorderedMatches.clear();
             spinner.setSelection(0);
             //end chunk-------------------------------------------------------------------
 
@@ -195,16 +194,22 @@ public class MainActivity extends AppCompatActivity {
                         Permutations.matches.add(Permutations.dictionary.get(hash));
                     }
                 }
+
+                //this cast removes duplicates
                 Set<String> s = new HashSet<>(Permutations.matches);
                 ArrayList<String> results = new ArrayList<>(s);
 
-                Permutations.reorderedMatches = results;
+                //copy results to a new ArrayList called reordered matches to manipulate later
+                reorderedMatches = results;
 
+                //remove results whose length is longer than the inputted char string
                 for (int i = 0; i < results.size(); i++) {
                     if (results.get(i).length() > letterBank.length()) {
                         results.remove(i);
                     }
                 }
+
+                //remove results that contain chars not in the inputted char string
                 for (int i = 0; i < results.size(); i++) {
                     if (!Sort.containsAllChars(letterBank, results.get(i).toLowerCase())) {
                         results.remove(i);
@@ -227,8 +232,6 @@ public class MainActivity extends AppCompatActivity {
                 else {
                     sortAlphabetically(results);
                     stringListToLowerCase(results);
-                    //String TAG = "Value of results: ";
-                    //Log.i(TAG, results.toString());
                     ArrayAdapter<String> itemsAdapter =
                             new ArrayAdapter<>(MainActivity.this, R.layout.custom_listview, results);
                     listView.setAdapter(itemsAdapter);
@@ -252,7 +255,6 @@ public class MainActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedItem = parent.getItemAtPosition(position).toString();
                 if (selectedItem.equals("alphabetized")) {
-                    Log.i("alpha sort", "clicked");
                     sortAlphabetically(reorderedMatches);
                     stringListToLowerCase(reorderedMatches);
                     ArrayAdapter<String> itemsAdapter =
@@ -260,7 +262,6 @@ public class MainActivity extends AppCompatActivity {
                     listView.setAdapter(itemsAdapter);
                 }
                 if (selectedItem.equals("byLength")) {
-                    Log.i("length sort", "clicked");
                     sortByWordLength(reorderedMatches);
                     stringListToLowerCase(reorderedMatches);
                     ArrayAdapter<String> itemsAdapter =
@@ -273,7 +274,6 @@ public class MainActivity extends AppCompatActivity {
                     ArrayAdapter<String> itemsAdapter =
                             new ArrayAdapter<>(MainActivity.this, R.layout.custom_listview, reorderedMatches);
                     listView.setAdapter(itemsAdapter);
-                    //Log.i("score sort", "clicked");
                 }
             }
 
@@ -463,12 +463,12 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-            //Log.i("JSON String", result);
+
             //parse json here to retrieve and show definition to user
             try {
-
                 //if parseCounter even
                 if ((parseCounter % 2 == 0)) {
+
                     JSONObject first = new JSONObject(result);
 
                     JSONArray resultsArr = first.getJSONArray("results");
@@ -483,18 +483,11 @@ public class MainActivity extends AppCompatActivity {
                     baseWord = lemmaObject.getString("text");
                     parseCounter++;
 
-                    //Log.i("base word", "" + baseWord);
-                    //Log.i("parseCounter", Float.toString(parseCounter));
-
                     new CallbackTask().execute(dictionaryEntries());
-
                 }
 
                 //if parseCounter odd
                 else {
-
-                    //Log.i("test", "definition code accessed");
-                    //Log.i("JSON object", result);
 
                     JSONObject first = new JSONObject(result);
 
@@ -530,9 +523,12 @@ public class MainActivity extends AppCompatActivity {
 
                     parseCounter++;
                 }
-                //Log.i("word definition", definition);
             }
+
             catch (JSONException e) {
+
+                //Do something to recover ... or kill the app.
+
                 //custom toast to show desired font and background color, also declared
                 //at the beginning of the file because i could not access in this inner class.
                 LayoutInflater inflater = getLayoutInflater();
@@ -549,9 +545,6 @@ public class MainActivity extends AppCompatActivity {
                 toast.setView(layout);
                 toast.show();
                 parseCounter++;
-
-                //Log.e("Scrabble Companion", "unexpected JSON exception", e);
-                // Do something to recover ... or kill the app.
             }
         }
     }

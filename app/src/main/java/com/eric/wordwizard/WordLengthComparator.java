@@ -1,4 +1,4 @@
-package com.example.eric.scrabbleversion2;
+package com.eric.wordwizard;
 
 import java.util.Comparator;
 

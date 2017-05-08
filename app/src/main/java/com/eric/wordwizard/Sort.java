@@ -1,4 +1,4 @@
-package com.example.eric.scrabbleversion2;
+package com.eric.wordwizard;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,18 +12,22 @@ import java.util.Set;
 
 public class Sort {
 
+    //sorts arraylist of strings alphabetically
     public static void sortAlphabetically(ArrayList<String> playableWords) {
         Collections.sort(playableWords);
     }
 
+    //sorts arraylist of strings by word score
     public static void sortByWordScore(ArrayList<String> playableWords) {
         Collections.sort(playableWords, new WordScoreComparator());	//see my WordScoreComparator class
     }
 
+    //sorts arraylist of strings by length
     public static void sortByWordLength(ArrayList<String> playableWords) {
         Collections.sort(playableWords, new WordLengthComparator());
     }
 
+    //converts all strings in arraylist to equivalent uniform lowercase string
     public static void stringListToLowerCase(ArrayList<String> playableWords) {
         for (int i=0; i<playableWords.size(); i++) {
             playableWords.set(i, playableWords.get(i).toLowerCase());
@@ -74,7 +78,6 @@ public class Sort {
     }
 
     //this chunk of code is used in Main to filter out any results that contain chars not in letterbank--
-//the logic might be wrong because it isn't working correctly at the moment.
     public static Set<Character> stringToCharacterSet(String s) {
         Set<Character> set = new HashSet<>();
         for (char c : s.toCharArray()) {
@@ -85,16 +88,5 @@ public class Sort {
 
     public static boolean containsAllChars(String container, String containee) {
         return stringToCharacterSet(container).containsAll(stringToCharacterSet(containee));
-    }
-
-    public static void main(String[] args) {
-        ArrayList<String> testList = new ArrayList<>();
-        testList.add("ALL");
-        testList.add("THESE");
-        testList.add("WORDS");
-        testList.add("ARE");
-        testList.add("CAPITAL");
-        stringListToLowerCase(testList);
-        System.out.println(testList.toString());
     }
 }

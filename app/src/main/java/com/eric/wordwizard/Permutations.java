@@ -1,4 +1,4 @@
-package com.example.eric.scrabbleversion2;
+package com.eric.wordwizard;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -52,20 +52,5 @@ public class Permutations extends MainActivity {
             }
         }
         return res;
-    }
-
-    //unit testing for permutation methods
-    public static void main(String[] args) {
-
-        String letters = "abcd";
-        combine(letters, new StringBuffer(), 0);
-        ArrayList<String> testFinalList = new ArrayList<>();
-
-        for (String str: combinations) {
-            testFinalList.addAll(permutation(str));
-        }
-
-        System.out.println("Combinations: " + combinations);
-        System.out.println("Permutations: " + testFinalList.toString());
     }
 }
