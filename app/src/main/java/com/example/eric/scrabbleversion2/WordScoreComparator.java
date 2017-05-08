@@ -20,7 +20,7 @@ public class WordScoreComparator extends Sort implements Comparator<String> {
         int score2 = getWordScore(str2);
 
         if (score1 > score2) {
-            return 1;
+            return -1;
         }
 
         else if (score1 == score2) {
@@ -28,7 +28,7 @@ public class WordScoreComparator extends Sort implements Comparator<String> {
         }
 
         else {
-            return -1;
+            return 1;
         }
     }
 

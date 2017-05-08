@@ -226,6 +226,7 @@ public class MainActivity extends AppCompatActivity {
 
                 else {
                     sortAlphabetically(results);
+                    stringListToLowerCase(results);
                     //String TAG = "Value of results: ";
                     //Log.i(TAG, results.toString());
                     ArrayAdapter<String> itemsAdapter =
@@ -269,10 +270,6 @@ public class MainActivity extends AppCompatActivity {
                 if (selectedItem.equals("byScore")) {
                     sortByWordScore(reorderedMatches);
                     stringListToLowerCase(reorderedMatches);
-//                    for (String str: reorderedMatches) {
-//                        Log.i("String", "" + str +" " + getWordScore(str));
-//                    }
-
                     ArrayAdapter<String> itemsAdapter =
                             new ArrayAdapter<>(MainActivity.this, R.layout.custom_listview, reorderedMatches);
                     listView.setAdapter(itemsAdapter);
