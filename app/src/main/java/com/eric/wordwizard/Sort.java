@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import static com.eric.wordwizard.Permutations.matchesWithPoints;
+
 /**
  * Created by Eric on 2/28/2017.
  * Updated 4/12/17
@@ -12,17 +14,14 @@ import java.util.Set;
 
 public class Sort {
 
-    //sorts arraylist of strings alphabetically
     public static void sortAlphabetically(ArrayList<String> playableWords) {
         Collections.sort(playableWords);
     }
 
-    //sorts arraylist of strings by word score
     public static void sortByWordScore(ArrayList<String> playableWords) {
         Collections.sort(playableWords, new WordScoreComparator());	//see my WordScoreComparator class
     }
 
-    //sorts arraylist of strings by length
     public static void sortByWordLength(ArrayList<String> playableWords) {
         Collections.sort(playableWords, new WordLengthComparator());
     }
@@ -32,6 +31,16 @@ public class Sort {
         for (int i=0; i<playableWords.size(); i++) {
             playableWords.set(i, playableWords.get(i).toLowerCase());
         }
+    }
+
+    //method that generates new arraylist that tacks on the point value of the string to the string
+    public static ArrayList<String> addScoresToList(ArrayList<String> playableWords) {
+        matchesWithPoints = new ArrayList<>(playableWords);
+        for(int i = 0; i< matchesWithPoints.size(); i++) {
+            matchesWithPoints.set(i, matchesWithPoints.get(i) +
+                    " (" + getWordScore(matchesWithPoints.get(i)) + ")");
+        }
+        return matchesWithPoints;
     }
 
     //get score for word so as can be sorted by that score later on

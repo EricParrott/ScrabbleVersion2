@@ -16,6 +16,7 @@ public class Permutations extends MainActivity {
     static ArrayList<String> allPermutations = new ArrayList<>();
     static ArrayList<String> matches = new ArrayList<>();
     static ArrayList<String> reorderedMatches = new ArrayList<>();
+    static ArrayList<String> matchesWithPoints = new ArrayList<>();
 
     //returns all combinations given a string
     static void combine(String instr, StringBuffer outstr, int index) {

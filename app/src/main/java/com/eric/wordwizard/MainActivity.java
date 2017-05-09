@@ -38,6 +38,7 @@ import java.util.Set;
 import javax.net.ssl.HttpsURLConnection;
 
 import static com.eric.wordwizard.Permutations.reorderedMatches;
+import static com.eric.wordwizard.Sort.addScoresToList;
 import static com.eric.wordwizard.Sort.getWordScore;
 import static com.eric.wordwizard.Sort.sortAlphabetically;
 import static com.eric.wordwizard.Sort.sortByWordLength;
@@ -235,17 +236,6 @@ public class MainActivity extends AppCompatActivity {
                     ArrayAdapter<String> itemsAdapter =
                             new ArrayAdapter<>(MainActivity.this, R.layout.custom_listview, results);
                     listView.setAdapter(itemsAdapter);
-
-                    //the following code executes when a word in the listview is clicked on---------
-                    listView.setOnItemClickListener(new OnItemClickListener() {
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            onClickItem = (listView.getItemAtPosition(position).toString().toLowerCase());
-                            //the API callbacktask occurs here.  Works with lines 47-52 and 427-454.
-                            //new CallbackTask().execute(inflections());
-                            new CallbackTask().execute(inflections());
-                        }
-                    });
-                    //end onClickItem code section--------------------------------------------------
                 }
             }
             }
@@ -272,7 +262,7 @@ public class MainActivity extends AppCompatActivity {
                     sortByWordScore(reorderedMatches);
                     stringListToLowerCase(reorderedMatches);
                     ArrayAdapter<String> itemsAdapter =
-                            new ArrayAdapter<>(MainActivity.this, R.layout.custom_listview, reorderedMatches);
+                            new ArrayAdapter<>(MainActivity.this, R.layout.custom_listview, addScoresToList(reorderedMatches));
                     listView.setAdapter(itemsAdapter);
                 }
             }
@@ -281,6 +271,21 @@ public class MainActivity extends AppCompatActivity {
                 //do nothing here
             }
         });
+
+        //the following code executes when a word in the listview is clicked on---------
+        listView.setOnItemClickListener(new OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                /*the next line gets the text behind the item clicked, converts it to a lowercase string,
+                 *and removes any characters that don't fall between the range a-z.  The last part
+                 *is necessary because when the list is sorted by word score, the points are appended
+                 *to the value of the string, which messes up the API call due to mismatching types */
+                onClickItem = (listView.getItemAtPosition(position).toString().toLowerCase().replaceAll("[^a-z]", ""));
+                //the API callbacktask occurs here.  Works with lines 47-52 and 427-454.
+                //new CallbackTask().execute(inflections());
+                new CallbackTask().execute(inflections());
+            }
+        });
+        //end onClickItem code section--------------------------------------------------
 
         //this chunk here disables/enables addPointsButtons when no points are in edittext field-------------
         if (editPlayerOnePoints.getText().toString().isEmpty()) {
@@ -469,6 +474,7 @@ public class MainActivity extends AppCompatActivity {
                 //if parseCounter even
                 if ((parseCounter % 2 == 0)) {
 
+                    //this first code executes to retrieve the base word
                     JSONObject first = new JSONObject(result);
 
                     JSONArray resultsArr = first.getJSONArray("results");
@@ -483,6 +489,9 @@ public class MainActivity extends AppCompatActivity {
                     baseWord = lemmaObject.getString("text");
                     parseCounter++;
 
+                    //once we have the baseword, we retrieve the API entry for that word
+                    //by calling the following task and executing only the code contained within
+                    //the else statement below.
                     new CallbackTask().execute(dictionaryEntries());
                 }
 
